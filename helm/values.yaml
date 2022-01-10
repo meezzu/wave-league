@@ -1,0 +1,66 @@
+# Default values for waveleague.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: stable
+
+imagePullSecrets:
+  - name: getequity
+nameOverride: ''
+fullnameOverride: ''
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 150Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+app:
+  port: 80
+  # Shared environment variables
+  commonEnv:
+    - app_env
+    - node_env
+    - amqp_url
+    - redis_url
+    - redis_password
+    - gateman_key
+    - mongodb_url
+  # Environment variables specific to this service
+  env:
+    - nip_service_url
+    - nip_service_api_version
+    - ios_build_number
+    - android_build_number
+  resources:
+    limits:
+      cpu: 200m
+      memory: 350Mi
+    requests:
+      cpu: 200m
+      memory: 250Mi
+
+worker:
+  port: 3001
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 230Mi
+    requests:
+      cpu: 100m
+      memory: 200Mi

@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "waveleague.fullname" . }}-worker
+  labels:
+    app.kubernetes.io/name: {{ include "waveleague.name" . }}
+    helm.sh/chart: {{ include "waveleague.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "waveleague.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "80"
+        updatedAt: {{ now | quote }}
+      labels:
+        app.kubernetes.io/name: {{ include "waveleague.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-worker
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["yarn"]
+          args: ["start:worker"]
+          ports:
+            - name: workerhttp
+              containerPort: {{ .Values.worker.port }}
+              protocol: TCP
+          env:
+            - name: SERVICE_NAME
+              value: {{ .Chart.Name }}-worker
+            - name: PORT
+              value: {{ .Values.app.port | quote }}
+            - name: WORKER_PORT
+              value: {{ .Values.worker.port | quote }}
+            {{- range $env := .Values.app.commonEnv }}
+            - name: {{ $env | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: getequity-common
+                  key: {{ $env }}
+            {{- end }}
+            {{- range $env := .Values.app.env }}
+            - name: {{ $env | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: waveleague
+                  key: {{ $env }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: workerhttp
+            initialDelaySeconds: 15
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

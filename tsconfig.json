@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2019",
+    "sourceMap": true,
+    "lib": ["esnext", "esnext.asynciterable"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["jest", "node"],
+    "esModuleInterop": true
+  },
+  "exclude": ["src/**/*.spec.ts"],
+  "include": ["typings/**/*.d.ts", "src/**/*"]
+}
