@@ -66,6 +66,11 @@ export const trimmedRequiredLowercaseString = {
   required: true
 }
 
+export const requiredNumber = {
+  type: SchemaTypes.Number,
+  required: true
+}
+
 export const uniqueIndex = {
   unique: true,
   index: true,
