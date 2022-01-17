@@ -4,12 +4,12 @@ import {
   trimmedRequiredLowercaseString,
   trimmedString
 } from 'data/base';
-import { model } from 'mongoose';
+import { IPlayer } from './player.model';
 
-const PlayerSchema = SchemaFactory({
+const PlayerSchema = SchemaFactory<IPlayer>({
   player_name: { ...trimmedRequiredString },
   email: { ...trimmedRequiredLowercaseString },
   country: { ...trimmedString }
 });
 
-module.exports = model('Player', PlayerSchema);
+export default PlayerSchema
