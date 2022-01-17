@@ -59,6 +59,13 @@ export const trimmedLowercaseString = {
   trim: true
 };
 
+export const trimmedRequiredLowercaseString = {
+  type: SchemaTypes.String,
+  lowercase: true,
+  trim: true,
+  required: true
+}
+
 export const uniqueIndex = {
   unique: true,
   index: true,
