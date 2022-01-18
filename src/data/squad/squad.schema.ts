@@ -22,13 +22,7 @@ const SquadSchema = SchemaFactory <ISquad>({
     ref: 'Player',
     required: true
   },
-  leagues: [
-    {
-      type: SchemaTypes.String,
-      ref: 'Leagues',
-      required: true
-    }
-  ]
+  
 });
 
 export default SquadSchema;
