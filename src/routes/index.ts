@@ -1,11 +1,10 @@
-import users from '../server/controllers/user.controller';
-import gateman from '../server/gateman';
 import { Router } from 'express';
+import { players } from '../server/controllers/player.controller';
 
 const v1Router = Router();
 
-v1Router.get('/players', gateman.guard(), users.getUser);
-v1Router.post('/players/login', gateman.guard(), users.login);
-v1Router.post('/players/signup', users.signup);
+v1Router.get('/players', players.getPlayers);
+// v1Router.post('/players/login', gateman.guard(), users.login);
+v1Router.post('/players/signup', players.createPlayer);
 
 export default v1Router;

@@ -3,7 +3,7 @@ import {
   trimmedRequiredString,
   trimmedRequiredLowercaseString,
   trimmedString
-} from 'data/base';
+} from '../base';
 import { IPlayer } from './player.model';
 
 const PlayerSchema = SchemaFactory<IPlayer>({
@@ -12,4 +12,4 @@ const PlayerSchema = SchemaFactory<IPlayer>({
   country: { ...trimmedString }
 });
 
-export default PlayerSchema
+export default PlayerSchema;
