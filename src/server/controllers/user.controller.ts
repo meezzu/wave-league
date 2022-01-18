@@ -7,8 +7,6 @@ import { Request, Response } from 'express';
 import { BaseController } from './base';
 
 export class UserController extends BaseController {
-  socket: string;
-
   getUser = async (req: Request, res: Response) => {
     try {
       const user = await userRepo.byID(req.user, '+transaction_pin');
