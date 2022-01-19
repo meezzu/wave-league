@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import { PlayerRepo } from '../../data/player';
 import gateman from '../../server/gateman';
 
+
+
 export class PlayerController extends BaseController {
   getPlayers = async (req: Request, res: Response) => {
     try {
@@ -30,6 +32,17 @@ export class PlayerController extends BaseController {
       this.handleError(req, res, err);
     }
   };
+  getOnePlayer = async (req: Request, res: Response) => {
+    try {
+      const player = await PlayerRepo.byID(req.params.id) 
+      this.handleSuccess(req, res, player);
+      
+    } catch (error) {
+      this.handleError(req, res, new Error(''));
+      console.log(error)
+    }
+  }
+
 }
 
 export const players = new PlayerController();
