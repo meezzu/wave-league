@@ -49,7 +49,7 @@ export class PlayerController extends BaseController {
 
    deleteManyPlayers = async (req: Request, res: Response) => {
     try {
-      const player = await PlayerRepo.deleteAll({});
+      const player = await PlayerRepo.deleteMany({});
       this.handleSuccess(req, res, player);
     } catch (error) {
       this.handleError(req, res, new Error(''));
