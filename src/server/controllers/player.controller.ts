@@ -36,7 +36,6 @@ export class PlayerController extends BaseController {
       this.handleSuccess(req, res, player);
     } catch (error) {
       this.handleError(req, res, new Error(''));
-      console.log(error);
     }
   };
   deleteOnePlayer = async (req: Request, res: Response) => {
@@ -45,19 +44,17 @@ export class PlayerController extends BaseController {
       this.handleSuccess(req, res, player);
     } catch (error) {
       this.handleError(req, res, new Error(''));
-      console.log(error);
     }
   };
 
-  /* deleteManyPlayers = async (req: Request, res: Response) => {
+   deleteManyPlayers = async (req: Request, res: Response) => {
     try {
-      const player = await PlayerRepo.destroy(req.params.id);
+      const player = await PlayerRepo.deleteAll({});
       this.handleSuccess(req, res, player);
     } catch (error) {
       this.handleError(req, res, new Error(''));
-      console.log(error);
     }
-  }; */
+  };
 
   updatePlayer = async (req: Request, res: Response) => {
     const update = { $set: req.body };
@@ -69,7 +66,6 @@ export class PlayerController extends BaseController {
       this.handleSuccess(req, res, player);
     } catch (error) {
       this.handleError(req, res, new Error(''));
-      console.log(error);
     }
   };
 }
