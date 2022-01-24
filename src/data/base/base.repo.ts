@@ -219,6 +219,17 @@ export class BaseRepository<T> implements Repository<T> {
     });
   }
 
+  deleteAll(condition: string | object): Promise<Boolean> {
+    const query = this.getQuery(condition);
+
+    return new Promise((resolve, reject) => {
+      this.model.deleteMany(query, {}, (err) => {
+        if (err) return reject(err);
+        resolve (true);
+      });
+    });
+  }
+
   /**
    * Soft deletes a document by created `deleted_at` field in the document and setting it to true.
    * @param condition
