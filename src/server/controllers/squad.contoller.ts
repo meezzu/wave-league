@@ -17,7 +17,7 @@ export class SquadController extends BaseController {
       const squad = await SquadRepo.updateWithOperators(req.params.id, update);
       this.handleSuccess(req, res, squad);
     } catch (error) {
-      this.handleError(req, res, new Error(''));
+      this.handleError(req, res, error);
     }
   };
 }

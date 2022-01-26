@@ -12,9 +12,9 @@ v1Router.get('/players/:id', players.getOnePlayer);
 v1Router.delete('/players/:id', players.deleteOnePlayer);
 v1Router.delete('/players', players.deleteManyPlayers);
 v1Router.put('/players/:id', players.updatePlayer);
-v1Router.post('/artiste', artistes.createArtiste);
-v1Router.put('/artiste/:id', artistes.updateArtiste);
-v1Router.post('/squad', squads.createSquad);
-v1Router.put('/squad/:id', squads.updateSquadDetails);
+v1Router.post('/artistes', artistes.createArtiste);
+v1Router.put('/artistes/:id', artistes.updateArtiste);
+v1Router.post('/squads', squads.createSquad);
+v1Router.put('/squads/:id', squads.updateSquadDetails);
 
 export default v1Router;

@@ -219,7 +219,7 @@ export class BaseRepository<T> implements Repository<T> {
     });
   }
 
-  deleteAll(condition: string | object): Promise<Boolean> {
+  deleteMany(condition: string | object): Promise<Boolean> {
     const query = this.getQuery(condition);
 
     return new Promise((resolve, reject) => {

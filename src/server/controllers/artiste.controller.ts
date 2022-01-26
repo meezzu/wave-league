@@ -19,7 +19,7 @@ export class ArtisteController extends BaseController {
         const artiste = await ArtisteRepo.updateWithOperators(req.params.id, update);
         this.handleSuccess(req, res, artiste);
       } catch (error) {
-        this.handleError(req, res, new Error(''));
+        this.handleError(req, res, error);
       }
   }
 }
