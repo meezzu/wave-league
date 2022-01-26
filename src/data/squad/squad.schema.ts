@@ -2,7 +2,7 @@ import {
   requiredNumber,
   SchemaFactory,
   trimmedRequiredString
-} from 'data/base';
+} from '../base';
 import { SchemaTypes } from 'mongoose';
 import { ISquad } from './squad.model';
 

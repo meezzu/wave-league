@@ -4,3 +4,5 @@ export interface IArtiste {
   avatar: string;
   price: number;
 }
+
+export type CreateArtisteDTO = IArtiste;

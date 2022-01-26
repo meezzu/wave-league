@@ -10,3 +10,5 @@ export interface ISquad extends Document{
   player: string;
   leagues: string;
 }
+
+export type CreateSquadDTO = ISquad;

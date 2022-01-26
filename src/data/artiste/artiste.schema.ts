@@ -1,4 +1,4 @@
-import { requiredNumber, SchemaFactory, trimmedRequiredString } from 'data/base';
+import { requiredNumber, SchemaFactory, trimmedRequiredString } from '../base';
 import { IArtiste } from './artiste.model';
 
 const ArtisteSchema = SchemaFactory<IArtiste>({
