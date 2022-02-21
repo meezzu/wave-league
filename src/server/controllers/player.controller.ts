@@ -9,7 +9,7 @@ export class PlayerController extends BaseController {
       const players = await PlayerRepo.all({ conditions: {} });
       this.handleSuccess(req, res, players);
     } catch (error) {
-      this.handleError(req, res, new Error(''));
+      this.handleError(req, res, error);
     }
   };
 
@@ -30,29 +30,36 @@ export class PlayerController extends BaseController {
       this.handleError(req, res, err);
     }
   };
+
+  authPlayer = async (req: Request, res: Response) => {
+    try {
+      const player = await PlayerRepo.byQuery({ email: req.body.email });
+
+      const token = await gateman.createSession({ id: player._id });
+
+      const data = { player, token };
+
+      this.handleSuccess(req, res, data);
+    } catch (err) {
+      this.handleError(req, res, err);
+    }
+  };
+
   getOnePlayer = async (req: Request, res: Response) => {
     try {
       const player = await PlayerRepo.byID(req.params.id);
       this.handleSuccess(req, res, player);
     } catch (error) {
-      this.handleError(req, res, new Error(''));
+      this.handleError(req, res, error);
     }
   };
+
   deleteOnePlayer = async (req: Request, res: Response) => {
     try {
       const player = await PlayerRepo.destroy(req.params.id);
       this.handleSuccess(req, res, player);
     } catch (error) {
-      this.handleError(req, res, new Error(''));
-    }
-  };
-
-   deleteManyPlayers = async (req: Request, res: Response) => {
-    try {
-      const player = await PlayerRepo.deleteMany({});
-      this.handleSuccess(req, res, player);
-    } catch (error) {
-      this.handleError(req, res, new Error(''));
+      this.handleError(req, res, error);
     }
   };
 
@@ -65,7 +72,7 @@ export class PlayerController extends BaseController {
       );
       this.handleSuccess(req, res, player);
     } catch (error) {
-      this.handleError(req, res, new Error(''));
+      this.handleError(req, res, error);
     }
   };
 }

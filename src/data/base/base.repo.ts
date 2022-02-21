@@ -225,7 +225,7 @@ export class BaseRepository<T> implements Repository<T> {
     return new Promise((resolve, reject) => {
       this.model.deleteMany(query, {}, (err) => {
         if (err) return reject(err);
-        resolve (true);
+        resolve(true);
       });
     });
   }
