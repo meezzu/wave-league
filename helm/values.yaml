@@ -10,7 +10,7 @@ image:
   tag: stable
 
 imagePullSecrets:
-  - name: getequity
+  - name: waveleague
 nameOverride: ''
 fullnameOverride: ''
 

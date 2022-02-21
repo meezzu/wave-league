@@ -3,7 +3,7 @@ import redis from '../common/services/redis';
 import env from '../common/config/env';
 import Iris from '@random-guys/iris';
 
-const authScheme = 'GetEquity';
+const authScheme = 'Waveleague';
 
 Iris.bootstrap(env.service_name, authScheme);
 

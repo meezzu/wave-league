@@ -47,7 +47,7 @@ spec:
             - name: {{ $env | upper }}
               valueFrom:
                 secretKeyRef:
-                  name: getequity-common
+                  name: waveleague-common
                   key: {{ $env }}
             {{- end }}
             {{- range $env := .Values.app.env }}
