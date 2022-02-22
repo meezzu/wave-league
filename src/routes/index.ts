@@ -1,29 +1,43 @@
 import { Router } from 'express';
-import { artistes } from 'server/controllers/artiste.controller';
-import { squads } from 'server/controllers/squad.controller';
+import { artistes, squads, players } from 'server/controllers';
+import { transfers } from 'server/controllers/transfers.controller';
 import gateman from 'server/gateman';
-import { players } from '../server/controllers/player.controller';
 
 const v1Router = Router();
 
 v1Router
-  .get('/players', players.getPlayers)
-  .get('/players/:id', players.getOnePlayer)
-  .put('/players/:id', players.updatePlayer)
-  .post('/players/login', players.authPlayer)
-  .post('/players/signup', players.createPlayer)
-  .delete('/players/:id', players.deleteOnePlayer);
+  .get('/players', gateman.guard('admin'), players.getMany)
+  .get('/players/:id', gateman.guard(['user', 'admin']), players.getOne)
+  .put('/players/:id', players.update)
+  .post('/players/login', players.login)
+  .post('/players/signup', players.signup)
+  .delete('/players/:id', gateman.guard('admin'), players.delete);
 
 v1Router
-  .get('/artistes', gateman.guard(), artistes.getArtistes)
-  .get('/artistes/:id', gateman.guard(), artistes.getOneArtiste);
+  .get('/artistes', gateman.guard(), artistes.getMany)
+  .get('/artistes/:id', gateman.guard(), artistes.getOne);
 
 v1Router
-  .get('/squads', gateman.guard(), squads.getSquads)
-  .post('/squads', gateman.guard(), squads.createSquad)
-  .get('/squads/:id', gateman.guard(), squads.getOneSquad)
-  .put('/squads/:id', gateman.guard(), squads.updateSquad)
-  .put('/squads/:id/add', gateman.guard(), squads.addArtiste)
-  .put('/squads/:id/remove', gateman.guard(), squads.removeArtiste);
+  .get('/squads', gateman.guard(), squads.getMany)
+  .post('/squads', gateman.guard(), squads.create)
+  .get('/squads/:id', gateman.guard(), squads.getOne)
+  .put('/squads/:id', gateman.guard(), squads.update)
+  .get('/squads/:id/transfers', gateman.guard(), squads.transfers)
+  .get(
+    '/squads/:id/weeks/:wid/transfers',
+    gateman.guard(),
+    squads.weekTransfers
+  )
+  .post('/squads/:id/artiste/:aid/add', gateman.guard(), squads.addArtiste)
+  .post(
+    '/squads/:id/artiste/:aid/remove',
+    gateman.guard(),
+    squads.removeArtiste
+  );
+
+v1Router
+  .get('/transfers', gateman.guard('admin'), transfers.getMany)
+  .get('/transfers/:id', gateman.guard('admin'), transfers.getOne)
+  .post('/transfers', gateman.guard(), transfers.createTransfer);
 
 export default v1Router;

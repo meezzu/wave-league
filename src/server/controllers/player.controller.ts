@@ -1,10 +1,10 @@
-import { BaseController } from './base';
+import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { PlayerRepo } from '../../data/player';
 import gateman from '../../server/gateman';
 
 export class PlayerController extends BaseController {
-  getPlayers = async (req: Request, res: Response) => {
+  getMany = async (req: Request, res: Response) => {
     try {
       const players = await PlayerRepo.all({ conditions: {} });
       this.handleSuccess(req, res, players);
@@ -17,7 +17,7 @@ export class PlayerController extends BaseController {
    * Creates a user account and makes a call to the wallet
    * service to create a wallet for the user.
    */
-  createPlayer = async (req: Request, res: Response) => {
+  signup = async (req: Request, res: Response) => {
     try {
       const player = await PlayerRepo.createAccount(req.body);
 
@@ -31,7 +31,7 @@ export class PlayerController extends BaseController {
     }
   };
 
-  authPlayer = async (req: Request, res: Response) => {
+  login = async (req: Request, res: Response) => {
     try {
       const player = await PlayerRepo.byQuery({ email: req.body.email });
 
@@ -45,7 +45,7 @@ export class PlayerController extends BaseController {
     }
   };
 
-  getOnePlayer = async (req: Request, res: Response) => {
+  getOne = async (req: Request, res: Response) => {
     try {
       const player = await PlayerRepo.byID(req.params.id);
       this.handleSuccess(req, res, player);
@@ -54,7 +54,7 @@ export class PlayerController extends BaseController {
     }
   };
 
-  deleteOnePlayer = async (req: Request, res: Response) => {
+  delete = async (req: Request, res: Response) => {
     try {
       const player = await PlayerRepo.destroy(req.params.id);
       this.handleSuccess(req, res, player);
@@ -63,7 +63,7 @@ export class PlayerController extends BaseController {
     }
   };
 
-  updatePlayer = async (req: Request, res: Response) => {
+  update = async (req: Request, res: Response) => {
     const update = { $set: req.body };
     try {
       const player = await PlayerRepo.updateWithOperators(

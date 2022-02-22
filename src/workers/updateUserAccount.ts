@@ -3,7 +3,7 @@ import { ConsumeMessage } from 'amqplib';
 import { checkConsumerCancelNotification } from './utils';
 import faker from 'faker';
 import logger from '../common/services/logger';
-import { userRepo } from '../data/user';
+import { PlayerRepo } from 'data/player';
 
 /**
  * Updates a user's account details
@@ -17,7 +17,7 @@ export default async function updateUserAccount(message: ConsumeMessage) {
   try {
     subscriber.acknowledgeMessage(message);
 
-    await userRepo.update(payload.id, {
+    await PlayerRepo.update(payload.id, {
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName()
     });
