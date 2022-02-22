@@ -1,4 +1,4 @@
-import { BaseRepository } from 'data/base';
+import { BaseRepository } from '../base';
 import { ISquad } from './squad.model';
 import SquadSchema from './squad.schema';
 

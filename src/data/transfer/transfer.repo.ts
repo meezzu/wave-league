@@ -1,4 +1,4 @@
-import { BaseRepository } from 'data/base';
+import { BaseRepository } from '../base';
 import { ITransfer } from './transfer.model';
 import TransferSchema from './transfer.schema';
 

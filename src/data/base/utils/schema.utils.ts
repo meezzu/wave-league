@@ -64,12 +64,17 @@ export const trimmedRequiredLowercaseString = {
   lowercase: true,
   trim: true,
   required: true
-}
+};
 
 export const requiredNumber = {
   type: SchemaTypes.Number,
   required: true
-}
+};
+
+export const requiredDate = {
+  type: SchemaTypes.Date,
+  required: true
+};
 
 export const uniqueIndex = {
   unique: true,

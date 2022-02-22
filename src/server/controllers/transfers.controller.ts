@@ -1,6 +1,6 @@
 import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
-import { TransferRepo } from 'data/transfer';
+import { TransferRepo } from '../../data/transfer';
 
 export class TransferController extends BaseController {
   getMany = async (req: Request, res: Response) => {

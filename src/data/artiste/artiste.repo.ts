@@ -1,4 +1,4 @@
-import { BaseRepository } from 'data/base';
+import { BaseRepository } from '../base';
 import { IArtiste } from './artiste.model';
 import ArtisteSchema from './artiste.schema';
 

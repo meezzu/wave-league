@@ -17,8 +17,8 @@ const start = async () => {
     await DB.connect();
     logger.message('📦  MongoDB Connected!');
 
-    await publisher.init(env.amqp_url);
-    logger.message('🚎  Event Bus Publisher ready!');
+    // await publisher.init(env.amqp_url);
+    // logger.message('🚎  Event Bus Publisher ready!');
 
     httpServer.listen(env.port);
     httpServer.on('listening', () =>

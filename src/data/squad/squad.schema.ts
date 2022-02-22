@@ -1,8 +1,4 @@
-import {
-  requiredNumber,
-  SchemaFactory,
-  trimmedRequiredString
-} from 'data/base';
+import { requiredNumber, SchemaFactory, trimmedRequiredString } from '../base';
 import { SchemaTypes } from 'mongoose';
 import { ISquad } from './squad.model';
 

@@ -1,6 +1,6 @@
 import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
-import { ArtisteRepo } from 'data/artiste';
+import { ArtisteRepo } from '../../data/artiste';
 
 export class ArtisteController extends BaseController {
   getMany = async (req: Request, res: Response) => {

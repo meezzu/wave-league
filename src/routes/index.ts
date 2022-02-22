@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import { artistes, squads, players } from 'server/controllers';
-import { transfers } from 'server/controllers/transfers.controller';
-import gateman from 'server/gateman';
+import { artistes, squads, players, transfers } from '../server/controllers';
+import gateman from '../server/gateman';
 
 const v1Router = Router();
 
