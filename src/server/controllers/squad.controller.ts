@@ -2,6 +2,7 @@ import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { SquadRepo } from '../../data/squad';
 import { TransferRepo } from '../../data/transfer';
+import { DuplicateModelError } from '../../common/errors';
 
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -30,6 +31,11 @@ export class SquadController extends BaseController {
 
       this.handleSuccess(req, res, squad);
     } catch (error) {
+      if (error.code === 11000) {
+        const err = new DuplicateModelError(error.message);
+        return this.handleError(req, res, err);
+      }
+
       this.handleError(req, res, error);
     }
   };

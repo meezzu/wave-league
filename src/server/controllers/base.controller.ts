@@ -3,23 +3,9 @@ import { Request, Response } from 'express';
 import HttpStatus from 'http-status-codes';
 import { ControllerError } from '../../common/errors';
 import logger from '../../common/services/logger';
-import { DuplicateModelError, ModelNotFoundError } from '../../data/base';
 import { MetricsService } from '../services';
 
 export class BaseController {
-  /*
-   * Determines the HTTP status code of an error
-   * @param err Error object
-   */
-  getHTTPErrorCode = (err: Error | any) => {
-    // check if error code exists and is a valid HTTP code.
-    if (err.code >= 100 && err.code < 600) return err.code;
-
-    if (err instanceof ModelNotFoundError) return HttpStatus.NOT_FOUND;
-    if (err instanceof DuplicateModelError) return HttpStatus.BAD_REQUEST;
-    return HttpStatus.BAD_REQUEST;
-  };
-
   /**
    * Handles operation success and sends a HTTP response
    * @param req Express request
@@ -62,7 +48,7 @@ export class BaseController {
      * the error can either be the "error_code" itself or "data" object that contains the error code
      */
     //@ts-ignore
-    const { data, error_code } = <ControllerError>err;
+    const { data, error_code, code } = <ControllerError>err;
 
     const irisErrormessage =
       err instanceof IrisAPIError && err.data.message
@@ -71,12 +57,7 @@ export class BaseController {
 
     const errorMessage = irisErrormessage || err.message || message;
 
-    res.jSend.error(
-      null,
-      errorMessage,
-      this.getHTTPErrorCode(err),
-      data?.error_code || error_code
-    );
+    res.jSend.error(null, errorMessage, code, data?.error_code || error_code);
     logger.logAPIError(req, res, err);
     MetricsService.record(req, res);
   };

@@ -51,10 +51,6 @@ export default class App {
       res.status(200).json({ status: 'UP' });
     });
 
-    this.server.post('/', (req, res) => {
-      return res.status(200).json({ key: 'value' });
-    });
-
     this.server.get('/metrics', MetricsService.send);
 
     this.server.use((req, res, next) => {

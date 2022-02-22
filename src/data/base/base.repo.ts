@@ -2,7 +2,7 @@ import mongoose, { Model, Schema, FilterQuery } from 'mongoose';
 import { Repository, Query, QueryResult, PaginationQuery } from '.';
 
 export class BaseRepository<T> implements Repository<T> {
-  private model: Model<T>;
+  protected model: Model<T>;
   constructor(protected name: string, protected schema: Schema<T>) {
     this.model = mongoose.model<T>(name, schema);
   }

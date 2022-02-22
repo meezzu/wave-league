@@ -101,3 +101,26 @@ export class LoginAuthenticationError extends ControllerError {
     this.error_code = 306;
   }
 }
+
+class RepositoryError extends ControllerError {
+  constructor(message) {
+    super(message);
+  }
+}
+
+export class DuplicateModelError extends RepositoryError {
+  constructor(message: string) {
+    super(message);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 11000;
+  }
+}
+
+export class ModelNotFoundError extends RepositoryError {
+  constructor(message: string) {
+    super(message);
+
+    this.code = NOT_FOUND;
+  }
+}

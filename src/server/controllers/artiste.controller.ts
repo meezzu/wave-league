@@ -1,7 +1,7 @@
 import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { ArtisteRepo } from '../../data/artiste';
-import { PointRepo } from 'data/point';
+import { PointRepo } from '../../data/point';
 
 export class ArtisteController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -41,9 +41,9 @@ export class ArtisteController extends BaseController {
 
   create = async (req: Request, res: Response) => {
     try {
-      const points = await PointRepo.create(req.body);
+      const artiste = await ArtisteRepo.create(req.body);
 
-      this.handleSuccess(req, res, points);
+      this.handleSuccess(req, res, artiste);
     } catch (error) {
       this.handleError(req, res, error);
     }
