@@ -6,7 +6,7 @@ import gateman from '../../server/gateman';
 export class PlayerController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const players = await PlayerRepo.all({ conditions: {} });
+      const players = await PlayerRepo.get({ conditions: {} });
       this.handleSuccess(req, res, players);
     } catch (error) {
       this.handleError(req, res, error);
@@ -66,10 +66,7 @@ export class PlayerController extends BaseController {
   update = async (req: Request, res: Response) => {
     const update = { $set: req.body };
     try {
-      const player = await PlayerRepo.updateWithOperators(
-        req.params.id,
-        update
-      );
+      const player = await PlayerRepo.update(req.params.id, update);
       this.handleSuccess(req, res, player);
     } catch (error) {
       this.handleError(req, res, error);

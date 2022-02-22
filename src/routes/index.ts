@@ -14,6 +14,7 @@ v1Router
 
 v1Router
   .get('/artistes', gateman.guard(), artistes.getMany)
+  .get('/artistes/:id/weeks/:wid/points', gateman.guard(), artistes.getPoints)
   .get('/artistes/:id', gateman.guard(), artistes.getOne);
 
 v1Router

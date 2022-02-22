@@ -82,4 +82,10 @@ export const uniqueIndex = {
   required: true
 };
 
+export const foreignKey = (relation: string) => ({
+  type: SchemaTypes.String,
+  ref: relation,
+  required: true
+});
+
 export const NIL_UUID = nanoid();

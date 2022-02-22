@@ -30,10 +30,10 @@ export interface Repository<T> {
   create(attributes: any): Promise<T>;
   byID(id: string, projections?: any, archived?: boolean): Promise<T>;
   byQuery(query: any, projections?: any, archived?: boolean);
-  list(query: PaginationQuery): Promise<QueryResult<T>>;
-  all(query: Query): Promise<T[]>;
+  getPaged(query: PaginationQuery): Promise<QueryResult<T>>;
+  get(query: Query): Promise<T[]>;
   update(condition: string | object, update: any): Promise<T>;
-  updateWithOperators(condition: string | object, update: any): Promise<T>;
+  update(condition: string | object, update: any): Promise<T>;
   updateAll(condition: string | object, update: any): Promise<T[]>;
   remove(condition: string | object): Promise<T>;
   destroy(condition: string | object): Promise<T>;

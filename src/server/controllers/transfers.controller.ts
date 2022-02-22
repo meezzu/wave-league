@@ -5,7 +5,7 @@ import { TransferRepo } from '../../data/transfer';
 export class TransferController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const transfers = await TransferRepo.list({ conditions: {} });
+      const transfers = await TransferRepo.getPaged({ conditions: {} });
 
       this.handleSuccess(req, res, transfers);
     } catch (error) {

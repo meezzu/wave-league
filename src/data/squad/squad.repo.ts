@@ -8,13 +8,13 @@ class SquadRepository extends BaseRepository<ISquad> {
   }
 
   async addArtiste(id: string, artiste_id: string) {
-    return this.updateWithOperators(id, {
+    return this.update(id, {
       $addToSet: { artistes: artiste_id }
     });
   }
 
   async removeArtiste(id: string, artiste_id: string) {
-    return this.updateWithOperators(id, {
+    return this.update(id, {
       $pull: { artistes: artiste_id }
     });
   }

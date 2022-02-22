@@ -6,7 +6,7 @@ import { TransferRepo } from '../../data/transfer';
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const squads = await SquadRepo.list({ conditions: {} });
+      const squads = await SquadRepo.getPaged({ conditions: {} });
 
       this.handleSuccess(req, res, squads);
     } catch (error) {
@@ -36,7 +36,7 @@ export class SquadController extends BaseController {
 
   update = async (req: Request, res: Response) => {
     try {
-      const squad = await SquadRepo.updateWithOperators(req.params.id, {
+      const squad = await SquadRepo.update(req.params.id, {
         $set: req.body
       });
 
@@ -68,7 +68,7 @@ export class SquadController extends BaseController {
 
   transfers = async (req: Request, res: Response) => {
     try {
-      const transfers = await TransferRepo.list({
+      const transfers = await TransferRepo.getPaged({
         conditions: { squad: req.params.id }
       });
 
@@ -80,7 +80,7 @@ export class SquadController extends BaseController {
 
   weekTransfers = async (req: Request, res: Response) => {
     try {
-      const transfers = await TransferRepo.list({
+      const transfers = await TransferRepo.getPaged({
         conditions: { squad: req.params.id, week: req.params.wid }
       });
 
