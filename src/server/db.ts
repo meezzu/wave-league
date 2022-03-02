@@ -13,6 +13,7 @@ export class DB {
   async connect() {
     await mongoose.connect(env.mongodb_url, {
       useUnifiedTopology: true,
+      useFindAndModify: true,
       useNewUrlParser: true,
       useCreateIndex: true,
       poolSize: 10

@@ -1,7 +1,22 @@
 import { Router } from 'express';
 import validator from '../server/middleware/validator';
-import { createArtiste, createSquad, login, signup } from '../validators';
-import { artistes, squads, players, transfers } from '../server/controllers';
+import {
+  createArtiste,
+  createPoint,
+  createSquad,
+  createWeek,
+  login,
+  signup,
+  updateSquad
+} from '../validators';
+import {
+  artistes,
+  squads,
+  players,
+  transfers,
+  weeks,
+  points
+} from '../server/controllers';
 import gateman from '../server/gateman';
 
 const v1Router = Router();
@@ -24,7 +39,7 @@ v1Router
   .get('/squads', gateman.guard(), squads.getMany)
   .post('/squads', gateman.guard(), validator(createSquad), squads.create)
   .get('/squads/:id', gateman.guard(), squads.getOne)
-  .put('/squads/:id', gateman.guard(), squads.update)
+  .put('/squads/:id', gateman.guard(), validator(updateSquad), squads.update)
   .get('/squads/:id/transfers', gateman.guard(), squads.transfers)
   .get(
     '/squads/:id/weeks/:wid/transfers',
@@ -41,6 +56,16 @@ v1Router
 v1Router
   .get('/transfers', gateman.guard('admin'), transfers.getMany)
   .get('/transfers/:id', gateman.guard('admin'), transfers.getOne)
-  .post('/transfers', gateman.guard(), transfers.createTransfer);
+  .post('/transfers', gateman.guard(), transfers.create);
+
+v1Router
+  .get('/weeks', weeks.getMany)
+  .get('/weeks/:id', weeks.getOne)
+  .post('/weeks', validator(createWeek), weeks.create);
+
+v1Router
+  .get('/points', points.getMany)
+  .get('/points/:id', points.getOne)
+  .post('/points', validator(createPoint), points.create);
 
 export default v1Router;

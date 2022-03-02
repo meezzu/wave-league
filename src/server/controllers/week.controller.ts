@@ -1,13 +1,13 @@
 import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
-import { TransferRepo } from '../../data/transfer';
+import { WeekRepo } from '../../data/week';
 
-export class TransferController extends BaseController {
+export class WeekController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const transfers = await TransferRepo.getPaged({ conditions: {} });
+      const weeks = await WeekRepo.getPaged({ conditions: {} });
 
-      this.handleSuccess(req, res, transfers);
+      this.handleSuccess(req, res, weeks);
     } catch (error) {
       this.handleError(req, res, error);
     }
@@ -15,9 +15,9 @@ export class TransferController extends BaseController {
 
   getOne = async (req: Request, res: Response) => {
     try {
-      const transfer = await TransferRepo.byID(req.params.id);
+      const week = await WeekRepo.byID(req.params.id);
 
-      this.handleSuccess(req, res, transfer);
+      this.handleSuccess(req, res, week);
     } catch (error) {
       this.handleError(req, res, error);
     }
@@ -25,13 +25,13 @@ export class TransferController extends BaseController {
 
   create = async (req: Request, res: Response) => {
     try {
-      const transfer = await TransferRepo.create(req.body);
+      const week = await WeekRepo.create(req.body);
 
-      this.handleSuccess(req, res, transfer);
+      this.handleSuccess(req, res, week);
     } catch (error) {
       this.handleError(req, res, error);
     }
   };
 }
 
-export const transfers = new TransferController();
+export const weeks = new WeekController();

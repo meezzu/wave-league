@@ -2,7 +2,7 @@
 import 'module-alias/register';
 
 import http from 'http';
-import { publisher } from '@random-guys/eventbus';
+// import { publisher } from '@random-guys/eventbus';
 import App from './app';
 import DB from './db';
 import env from '../common/config/env';
@@ -34,7 +34,7 @@ const start = async () => {
 
 start();
 
-process.once('SIGINT', () => {
-  const pubConnection = publisher.getConnection();
-  if (pubConnection) pubConnection.close();
-});
+// process.once('SIGINT', () => {
+//   const pubConnection = publisher.getConnection();
+//   if (pubConnection) pubConnection.close();
+// });

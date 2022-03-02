@@ -33,7 +33,7 @@ const validate = (data: any, schema: ObjectSchema) => {
   };
 };
 
-type ValidatorContext = 'body' | 'query';
+type ValidatorContext = 'body' | 'query' | 'params';
 
 export default (schema: ObjectSchema, context: ValidatorContext = 'body') => {
   return (req: Request, res: Response, next: NextFunction) => {

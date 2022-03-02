@@ -1,13 +1,13 @@
 import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
-import { TransferRepo } from '../../data/transfer';
+import { PointRepo } from '../../data/point';
 
-export class TransferController extends BaseController {
+export class PointsController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const transfers = await TransferRepo.getPaged({ conditions: {} });
+      const points = await PointRepo.getPaged({ conditions: {} });
 
-      this.handleSuccess(req, res, transfers);
+      this.handleSuccess(req, res, points);
     } catch (error) {
       this.handleError(req, res, error);
     }
@@ -15,9 +15,9 @@ export class TransferController extends BaseController {
 
   getOne = async (req: Request, res: Response) => {
     try {
-      const transfer = await TransferRepo.byID(req.params.id);
+      const point = await PointRepo.byID(req.params.id);
 
-      this.handleSuccess(req, res, transfer);
+      this.handleSuccess(req, res, point);
     } catch (error) {
       this.handleError(req, res, error);
     }
@@ -25,13 +25,13 @@ export class TransferController extends BaseController {
 
   create = async (req: Request, res: Response) => {
     try {
-      const transfer = await TransferRepo.create(req.body);
+      const point = await PointRepo.create(req.body);
 
-      this.handleSuccess(req, res, transfer);
+      this.handleSuccess(req, res, point);
     } catch (error) {
       this.handleError(req, res, error);
     }
   };
 }
 
-export const transfers = new TransferController();
+export const points = new PointsController();
