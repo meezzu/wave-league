@@ -1,0 +1,7 @@
+version: "3.7"
+
+services:
+  wave-league:
+    image: wave-league:latest
+    ports:
+      - "3000:3000"

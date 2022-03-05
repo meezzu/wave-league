@@ -54,9 +54,9 @@ v1Router
   );
 
 v1Router
-  .get('/transfers', gateman.guard('admin'), transfers.getMany)
-  .get('/transfers/:id', gateman.guard('admin'), transfers.getOne)
-  .post('/transfers', gateman.guard(), transfers.create);
+  .get('/transfers', transfers.getMany)
+  .get('/transfers/:id', transfers.getOne)
+  .post('/transfers', transfers.create);
 
 v1Router
   .get('/weeks', weeks.getMany)

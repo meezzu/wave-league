@@ -54,7 +54,10 @@ export class SquadController extends BaseController {
 
   removeArtiste = async (req: Request, res: Response) => {
     try {
-      const squad = await SquadRepo.removeArtiste(req.params.id, req.body.aid);
+      const squad = await SquadRepo.removeArtiste(
+        req.params.id,
+        req.params.aid
+      );
 
       this.handleSuccess(req, res, squad);
     } catch (error) {
