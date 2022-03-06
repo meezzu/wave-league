@@ -14,24 +14,12 @@ jobs:
   deploy:
     runs-on: "ubuntu-latest"
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=tag::$(cat VERSION)
-
-      - name: Authenticate
-        uses: actions-hub/docker/login@master
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.PAT }}
-          DOCKER_REGISTRY_URL: ghcr.io
-
-      - name: Build latest image
-        run: docker build -t ghcr.io/${GITHUB_REPOSITORY}:${{ steps.get_version.outputs.tag }} .
-
-      - name: Push
-        uses: actions-hub/docker@master
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          args: push ghcr.io/${GITHUB_REPOSITORY}:${{ steps.get_version.outputs.tag }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "wave-league"
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: true
+          branch: "master"
+          healthcheck: "https://wave-league.herokuapp.com"
