@@ -1,4 +1,4 @@
-import { AccountExistsError } from '../../common/errors';
+import { AccountExistsError, AccountNotExistsError } from '../../common/errors';
 import { BaseRepository } from '../base';
 import { CreatePlayerDTO, IPlayer } from './player.model';
 import PlayerSchema from './player.schema';
@@ -17,6 +17,13 @@ class PlayerRepository extends BaseRepository<IPlayer> {
     await this.isEmailUsed(body.email);
 
     return this.create(body);
+  }
+
+  async logIntoAccount(email: string) {
+    const player = await PlayerRepo.byQuery({ email });
+    if (!player) throw new AccountNotExistsError();
+
+    return player;
   }
 
   /**

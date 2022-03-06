@@ -33,7 +33,7 @@ export class PlayerController extends BaseController {
 
   login = async (req: Request, res: Response) => {
     try {
-      const player = await PlayerRepo.byQuery({ email: req.body.email });
+      const player = await PlayerRepo.logIntoAccount(req.body.email);
 
       const token = await gateman.createSession({ id: player._id });
 

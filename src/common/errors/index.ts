@@ -92,6 +92,16 @@ export class AccountExistsError extends ControllerError {
   }
 }
 
+export class AccountNotExistsError extends ControllerError {
+  constructor() {
+    const errorMessage = 'account does not exist';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 302;
+  }
+}
+
 export class LoginAuthenticationError extends ControllerError {
   constructor() {
     const errorMessage = 'Incorrect phone number or password supplied';
