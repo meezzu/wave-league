@@ -26,12 +26,11 @@ export class BaseRepository<T> implements Repository<T> {
 
   /**
    * Finds a document by it's id
-   * @param _id
+   * @param id
    * @param projections
-   * @param archived
    */
-  byID(_id: string, projections?: any): Promise<T> {
-    const query = this.getQuery(_id);
+  byID(id: string, projections?: any): Promise<T> {
+    const query = this.getQuery(id);
     return this.model.findOne(query).select(projections).exec();
   }
 

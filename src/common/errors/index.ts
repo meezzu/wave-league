@@ -134,3 +134,23 @@ export class ModelNotFoundError extends RepositoryError {
     this.code = NOT_FOUND;
   }
 }
+
+export class SquadNotExistsError extends ControllerError {
+  constructor() {
+    const errorMessage = 'squad does not exist';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 303;
+  }
+}
+
+export class SquadFilledError extends ControllerError {
+  constructor() {
+    const errorMessage = 'your squad is already complete';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 303;
+  }
+}

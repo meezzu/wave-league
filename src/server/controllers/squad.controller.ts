@@ -17,7 +17,7 @@ export class SquadController extends BaseController {
 
   getOne = async (req: Request, res: Response) => {
     try {
-      const squad = await SquadRepo.byID(req.params.id);
+      const squad = await SquadRepo.getOne(req.params.id);
 
       this.handleSuccess(req, res, squad);
     } catch (error) {
