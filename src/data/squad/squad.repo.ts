@@ -1,11 +1,7 @@
 import { ArtisteRepo } from '../../data/artiste';
 import { TransferRepo } from '../../data/transfer';
 import { FilterQuery, startSession } from 'mongoose';
-import {
-  ControllerError,
-  SquadFilledError,
-  SquadNotExistsError
-} from '../../common/errors';
+import { SquadFilledError, SquadNotExistsError } from '../../common/errors';
 import { BaseRepository } from '../base';
 import { ISquad } from './squad.model';
 import SquadSchema from './squad.schema';
