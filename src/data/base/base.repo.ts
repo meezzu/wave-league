@@ -7,6 +7,10 @@ export class BaseRepository<T> implements Repository<T> {
     this.model = mongoose.model<T>(name, schema);
   }
 
+  getModel() {
+    return this.model;
+  }
+
   /**
    * Converts a passed condition argument to a query
    * @param condition string or object condition

@@ -4,5 +4,4 @@ export interface ITransfer extends Document {
   transfer_value: number;
   artiste: string;
   squad: string;
-  week: string;
 }

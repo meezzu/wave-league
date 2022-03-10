@@ -1,5 +1,9 @@
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 import { SchemaTypes } from 'mongoose';
+
+const nanoid = customAlphabet(
+  '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+);
 
 /**
  * Removes _id field in subdocuments and allows virtual fields to be returned

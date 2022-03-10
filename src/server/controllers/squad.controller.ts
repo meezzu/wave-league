@@ -2,7 +2,10 @@ import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { SquadRepo } from '../../data/squad';
 import { TransferRepo } from '../../data/transfer';
-import { DuplicateModelError } from '../../common/errors';
+import {
+  DuplicateModelError,
+  PlayerSquadExistsError
+} from '../../common/errors';
 
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -27,6 +30,9 @@ export class SquadController extends BaseController {
 
   create = async (req: Request, res: Response) => {
     try {
+      const exists = await SquadRepo.byQuery({ player: req.user });
+      if (exists) throw new PlayerSquadExistsError();
+
       const squad = await SquadRepo.create(req.body);
 
       this.handleSuccess(req, res, squad);

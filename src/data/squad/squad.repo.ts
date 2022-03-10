@@ -1,5 +1,11 @@
-import { FilterQuery } from 'mongoose';
-import { SquadFilledError, SquadNotExistsError } from '../../common/errors';
+import { ArtisteRepo } from '../../data/artiste';
+import { TransferRepo } from '../../data/transfer';
+import { FilterQuery, startSession } from 'mongoose';
+import {
+  ControllerError,
+  SquadFilledError,
+  SquadNotExistsError
+} from '../../common/errors';
 import { BaseRepository } from '../base';
 import { ISquad } from './squad.model';
 import SquadSchema from './squad.schema';
@@ -17,15 +23,42 @@ class SquadRepository extends BaseRepository<ISquad> {
       .exec();
   }
 
-  async addArtiste(id: string, artiste_id: string) {
-    const squad = await this.byID(id);
-
+  async addArtiste(id: string, aid: string) {
+    let squad = await this.byID(id);
     if (!squad) throw new SquadNotExistsError();
-    if (squad.artistes.length == 8) throw new SquadFilledError();
+    if (squad.artistes.length >= 8) throw new SquadFilledError();
 
-    return this.update(id, {
-      $addToSet: { artistes: artiste_id }
+    const session = await startSession();
+    await session.withTransaction(async () => {
+      squad = await this.model.findByIdAndUpdate(
+        id,
+        { $addToSet: { artistes: aid } },
+        { new: true, session }
+      );
+
+      const artist = await ArtisteRepo.byID(aid);
+      console.log({
+        transfer_value: artist.price,
+        squad: id,
+        artiste: aid
+      });
+
+      await TransferRepo.getModel().create(
+        [
+          {
+            transfer_value: artist.price,
+            squad: id,
+            artiste: aid
+          }
+        ],
+        { session }
+      );
+
+      session.commitTransaction();
     });
+    session.endSession();
+
+    return squad;
   }
 
   async removeArtiste(id: string, artiste_id: string) {

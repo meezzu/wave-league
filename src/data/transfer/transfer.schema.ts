@@ -9,11 +9,6 @@ const TransferSchema = SchemaFactory<ITransfer>({
     ref: 'Artiste',
     required: true
   },
-  week: {
-    type: SchemaTypes.String,
-    ref: 'Squad',
-    required: true
-  },
   squad: {
     type: SchemaTypes.String,
     ref: 'Squad',

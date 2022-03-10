@@ -145,6 +145,16 @@ export class SquadNotExistsError extends ControllerError {
   }
 }
 
+export class PlayerSquadExistsError extends ControllerError {
+  constructor() {
+    const errorMessage = 'you have already created a squad';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 305;
+  }
+}
+
 export class SquadFilledError extends ControllerError {
   constructor() {
     const errorMessage = 'your squad is already complete';
