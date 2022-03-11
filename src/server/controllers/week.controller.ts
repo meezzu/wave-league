@@ -5,7 +5,7 @@ import { WeekRepo } from '../../data/week';
 export class WeekController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const weeks = await WeekRepo.getPaged({ conditions: {} });
+      const weeks = await WeekRepo.getPaged();
 
       this.handleSuccess(req, res, weeks);
     } catch (error) {

@@ -66,25 +66,36 @@ export class BaseRepository<T> implements Repository<T> {
 
   /**
    * Same as `get()` but returns paginated results.
-   * @param query Query
+   * @param opts Query
    */
-  async getPaged(query: PaginationQuery): Promise<QueryResult<T>> {
-    const page = Number(query.page) - 1 || 0;
-    const per_page = Number(query.per_page) || 20;
+  async getPaged(opts?: PaginationQuery): Promise<QueryResult<T>> {
+    const query = opts.query ?? {};
+    const page = Number(opts.page) - 1 || 0;
+    const per_page = Number(opts.per_page) || 20;
     const offset = page * per_page;
-    const sort = query.sort || 'created_at';
+    const sort = opts.sort || 'created_at';
 
-    const result = await this.model
-      .find({ ...query.conditions, deleted_at: undefined })
-      .limit(per_page)
-      .select(query.projections)
-      .skip(offset)
-      .sort(sort)
-      .exec();
+    const finalQuery = { ...query };
+    console.log(finalQuery);
+
+    const [totalForQuery, total, result] = await Promise.all([
+      this.model.countDocuments(finalQuery).exec(),
+      this.model.countDocuments().exec(),
+      this.model
+        .find(finalQuery)
+        .limit(per_page)
+        .select(opts.projections)
+        .skip(offset)
+        .sort(sort)
+        .exec()
+    ]);
 
     return {
+      total_pages: Math.ceil(total / per_page),
+      filter_total: totalForQuery,
       page: page + 1,
       per_page,
+      total,
       sort,
       result
     };

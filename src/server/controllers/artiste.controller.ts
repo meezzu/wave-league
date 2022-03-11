@@ -6,8 +6,14 @@ import { PointRepo } from '../../data/point';
 export class ArtisteController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
+      const query = req.query.q
+        ? { artiste_name: { $regex: req.query.q, $options: 'i' } }
+        : {};
+
       const artistes = await ArtisteRepo.getPaged({
-        conditions: {}
+        query,
+        page: Number(req.query.page),
+        per_page: Number(req.query.per_page)
       });
 
       this.handleSuccess(req, res, artistes);

@@ -10,7 +10,7 @@ import {
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const squads = await SquadRepo.getPaged({ conditions: {} });
+      const squads = await SquadRepo.getPaged({ ...req.query });
 
       this.handleSuccess(req, res, squads);
     } catch (error) {
@@ -84,7 +84,7 @@ export class SquadController extends BaseController {
   transfers = async (req: Request, res: Response) => {
     try {
       const transfers = await TransferRepo.getPaged({
-        conditions: { squad: req.params.id }
+        query: { squad: req.params.id }
       });
 
       this.handleSuccess(req, res, transfers);
@@ -96,7 +96,7 @@ export class SquadController extends BaseController {
   weekTransfers = async (req: Request, res: Response) => {
     try {
       const transfers = await TransferRepo.getPaged({
-        conditions: { squad: req.params.id, week: req.params.wid }
+        query: { squad: req.params.id, week: req.params.wid }
       });
 
       this.handleSuccess(req, res, transfers);

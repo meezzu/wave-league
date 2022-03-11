@@ -6,6 +6,7 @@ import {
   createSquad,
   createWeek,
   login,
+  paginate,
   signup,
   updateSquad
 } from '../validators';
@@ -22,7 +23,7 @@ import gateman from '../server/gateman';
 const v1Router = Router();
 
 v1Router
-  .get('/players', players.getMany)
+  .get('/players', validator(paginate, 'query'), players.getMany)
   .get('/players/:id', gateman.guard(['user', 'admin']), players.getOne)
   .put('/players/:id', players.update)
   .post('/players/login', validator(login), players.login)
@@ -30,13 +31,18 @@ v1Router
   .delete('/players/:id', gateman.guard('admin'), players.delete);
 
 v1Router
-  .get('/artistes', gateman.guard(), artistes.getMany)
+  .get(
+    '/artistes',
+    gateman.guard(),
+    validator(paginate, 'query'),
+    artistes.getMany
+  )
   .post('/artistes', gateman.guard(), validator(createArtiste), artistes.create)
   .get('/artistes/:id/weeks/:wid/points', gateman.guard(), artistes.getPoints)
   .get('/artistes/:id', gateman.guard(), artistes.getOne);
 
 v1Router
-  .get('/squads', gateman.guard(), squads.getMany)
+  .get('/squads', gateman.guard(), validator(paginate, 'query'), squads.getMany)
   .post('/squads', gateman.guard(), validator(createSquad), squads.create)
   .get('/squads/:id', gateman.guard(), squads.getOne)
   .put('/squads/:id', gateman.guard(), validator(updateSquad), squads.update)
@@ -54,17 +60,17 @@ v1Router
   );
 
 v1Router
-  .get('/transfers', transfers.getMany)
+  .get('/transfers', validator(paginate, 'query'), transfers.getMany)
   .get('/transfers/:id', transfers.getOne)
   .post('/transfers', transfers.create);
 
 v1Router
-  .get('/weeks', weeks.getMany)
+  .get('/weeks', validator(paginate, 'query'), weeks.getMany)
   .get('/weeks/:id', weeks.getOne)
   .post('/weeks', validator(createWeek), weeks.create);
 
 v1Router
-  .get('/points', points.getMany)
+  .get('/points', validator(paginate, 'query'), points.getMany)
   .get('/points/:id', points.getOne)
   .post('/points', validator(createPoint), points.create);
 

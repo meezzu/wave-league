@@ -1,8 +1,10 @@
 import joi from 'joi';
 
-const requiredString = joi.string().trim().required();
+const optionalString = joi.string().trim();
+const requiredString = optionalString.required();
 const requiredEmail = requiredString.email();
-const requiredNumber = joi.number().min(1).max(100).integer().required();
+const optionalNumber = joi.number().min(1).integer();
+const requiredNumber = optionalNumber.max(100).required();
 const requiredDate = joi.date().required();
 
 export const signup = joi.object({
@@ -41,4 +43,10 @@ export const createPoint = joi.object({
   artiste: requiredString,
   points: requiredNumber,
   week: requiredString
+});
+
+export const paginate = joi.object({
+  q: optionalString.allow('', null),
+  page: optionalNumber.default(1),
+  per_page: optionalNumber.default(20)
 });

@@ -1,6 +1,9 @@
 export interface QueryResult<T> {
   page: number;
   per_page: number;
+  total: number;
+  filter_total: number;
+  total_pages: number;
   sort: string | object;
   result: T[];
 }
@@ -10,7 +13,7 @@ export interface QueryResult<T> {
  */
 export interface PaginationQuery {
   archived?: boolean | string;
-  conditions: any;
+  query?: any;
   page?: number;
   per_page?: number;
   projections?: any;
