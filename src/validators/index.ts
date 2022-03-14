@@ -46,7 +46,10 @@ export const createPoint = joi.object({
 });
 
 export const paginate = joi.object({
-  q: optionalString.allow('', null),
+  name: optionalString.allow('', null),
+  label: optionalString.allow('', null),
+  max_price: optionalNumber,
+  min_price: optionalNumber,
   page: optionalNumber.default(1),
   per_page: optionalNumber.default(20)
 });

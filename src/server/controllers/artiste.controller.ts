@@ -6,9 +6,28 @@ import { PointRepo } from '../../data/point';
 export class ArtisteController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const query = req.query.q
-        ? { artiste_name: { $regex: req.query.q, $options: 'i' } }
+      const artiste_name = req.query.name
+        ? { artiste_name: { $regex: req.query.name, $options: 'i' } }
         : {};
+
+      const record_label = req.query.label
+        ? { record_label: { $regex: req.query.label, $options: 'i' } }
+        : {};
+
+      const min_price = req.query.min_price
+        ? { price: { $gte: req.query.min_price } }
+        : {};
+
+      const max_price = req.query.max_price
+        ? { price: { $lte: req.query.max_price } }
+        : {};
+
+      const query = {
+        ...artiste_name,
+        ...record_label,
+        ...min_price,
+        ...max_price
+      };
 
       const artistes = await ArtisteRepo.getPaged({
         query,

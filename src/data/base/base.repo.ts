@@ -75,8 +75,7 @@ export class BaseRepository<T> implements Repository<T> {
     const offset = page * per_page;
     const sort = opts.sort || 'created_at';
 
-    const finalQuery = { ...query };
-    console.log(finalQuery);
+    const finalQuery = { ...query, deleted_at: undefined };
 
     const [totalForQuery, total, result] = await Promise.all([
       this.model.countDocuments(finalQuery).exec(),
