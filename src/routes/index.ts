@@ -27,6 +27,7 @@ v1Router
   .get('/players/:id', gateman.guard(['user', 'admin']), players.getOne)
   .put('/players/:id', players.update)
   .post('/players/login', validator(login), players.login)
+  .get('/players/:id/squad', gateman.guard('user'), players.getSquad)
   .post('/players/signup', validator(signup), players.signup)
   .delete('/players/:id', gateman.guard('admin'), players.delete);
 

@@ -2,6 +2,7 @@ import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { PlayerRepo } from '../../data/player';
 import gateman from '../../server/gateman';
+import { SquadRepo } from '../../data/squad';
 
 export class PlayerController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -68,6 +69,15 @@ export class PlayerController extends BaseController {
     try {
       const player = await PlayerRepo.update(req.params.id, update);
       this.handleSuccess(req, res, player);
+    } catch (error) {
+      this.handleError(req, res, error);
+    }
+  };
+
+  getSquad = async (req: Request, res: Response) => {
+    try {
+      const squad = await SquadRepo.byQuery({ player: req.user });
+      this.handleSuccess(req, res, squad);
     } catch (error) {
       this.handleError(req, res, error);
     }
