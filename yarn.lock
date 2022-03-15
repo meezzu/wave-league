@@ -606,6 +606,11 @@
     axios-retry "^3.1.2"
     npm-cli-login "^0.1.1"
 
+"@random-guys/omi@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@random-guys/omi/-/omi-0.0.2.tgz#cae3aabc87f14a1432c1542dfec2f339f8f90dd7"
+  integrity sha512-tOuGefDxUnEuY/EzX3kbNYQyJMx5+bPPnaLkb+QodiR7ksOONH9F6PaO9ssWsKamg632CIXf4vRpE14VO7LeUQ==
+
 "@sideway/address@^4.1.3":
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.3.tgz#d93cce5d45c5daec92ad76db492cc2ee3c64ab27"
