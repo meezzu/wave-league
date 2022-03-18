@@ -35,6 +35,8 @@ export class ArtisteController extends BaseController {
         per_page: Number(req.query.per_page)
       });
 
+      artistes.result = artistes.result.map((it) => ({ ...it, points: 0 }));
+
       this.handleSuccess(req, res, artistes);
     } catch (error) {
       this.handleError(req, res, error);

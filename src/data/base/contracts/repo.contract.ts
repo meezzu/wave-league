@@ -12,11 +12,11 @@ export interface QueryResult<T> {
  * A repository query that specifies pagination options
  */
 export interface PaginationQuery {
-  archived?: boolean | string;
   query?: any;
   page?: number;
   per_page?: number;
   projections?: any;
+  populations?: any;
   sort?: string | object;
 }
 

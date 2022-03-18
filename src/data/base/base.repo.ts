@@ -69,11 +69,11 @@ export class BaseRepository<T> implements Repository<T> {
    * @param opts Query
    */
   async getPaged(opts?: PaginationQuery): Promise<QueryResult<T>> {
-    const query = opts.query ?? {};
-    const page = Number(opts.page) - 1 || 0;
-    const per_page = Number(opts.per_page) || 20;
+    const query = opts?.query ?? {};
+    const page = Number(opts?.page) - 1 || 0;
+    const per_page = Number(opts?.per_page) || 20;
     const offset = page * per_page;
-    const sort = opts.sort || 'created_at';
+    const sort = opts?.sort || 'created_at';
 
     const finalQuery = { ...query, deleted_at: undefined };
 
@@ -83,9 +83,11 @@ export class BaseRepository<T> implements Repository<T> {
       this.model
         .find(finalQuery)
         .limit(per_page)
-        .select(opts.projections)
+        .select(opts?.projections)
+        .populate(opts.populations)
         .skip(offset)
         .sort(sort)
+        .lean()
         .exec()
     ]);
 

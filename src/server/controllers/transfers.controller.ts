@@ -5,7 +5,12 @@ import { TransferRepo } from '../../data/transfer';
 export class TransferController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const transfers = await TransferRepo.getPaged();
+      const transfers = await TransferRepo.getPaged({
+        populations: [
+          { path: 'squad', select: 'squad_name' },
+          { path: 'artiste', select: 'artiste_name' }
+        ]
+      });
 
       this.handleSuccess(req, res, transfers);
     } catch (error) {

@@ -10,7 +10,10 @@ import {
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const squads = await SquadRepo.getPaged({ ...req.query });
+      const squads = await SquadRepo.getPaged({
+        ...req.query,
+        populations: { path: 'player', select: 'player_name' }
+      });
 
       this.handleSuccess(req, res, squads);
     } catch (error) {

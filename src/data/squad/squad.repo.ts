@@ -33,11 +33,6 @@ class SquadRepository extends BaseRepository<ISquad> {
       );
 
       const artist = await ArtisteRepo.byID(aid);
-      console.log({
-        transfer_value: artist.price,
-        squad: id,
-        artiste: aid
-      });
 
       await TransferRepo.getModel().create(
         [
