@@ -87,12 +87,11 @@ export class BaseRepository<T> implements Repository<T> {
         .populate(opts.populations)
         .skip(offset)
         .sort(sort)
-        .lean()
         .exec()
     ]);
 
     return {
-      total_pages: Math.ceil(total / per_page),
+      total_pages: Math.ceil(totalForQuery / per_page),
       filter_total: totalForQuery,
       page: page + 1,
       per_page,
