@@ -9,8 +9,8 @@ const ArtisteSchema = SchemaFactory<IArtiste>({
 });
 
 ArtisteSchema.index({
-  created_at: 1,
-  deleted_at: 1
+  deleted_at: 1,
+  created_at: 1
 });
 
 ArtisteSchema.index({

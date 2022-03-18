@@ -31,6 +31,7 @@ export class ArtisteController extends BaseController {
 
       const artistes = await ArtisteRepo.getPaged({
         query,
+        sort: req.query.sort || 'created_at',
         page: Number(req.query.page),
         per_page: Number(req.query.per_page)
       });

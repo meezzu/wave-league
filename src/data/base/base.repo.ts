@@ -31,23 +31,30 @@ export class BaseRepository<T> implements Repository<T> {
   /**
    * Finds a document by it's id
    * @param id
-   * @param projections
+   * @param opts
    */
-  byID(id: string, projections?: any): Promise<T> {
+  byID(id: string, opts?: { projections?: any; populations?: any }): Promise<T> {
     const query = this.getQuery(id);
-    return this.model.findOne(query).select(projections).exec();
+    return this.model
+      .findOne(query)
+      .select(opts?.projections)
+      .populate(opts?.populations)
+      .exec();
   }
 
   /**
    * Finds a document by an object query.
    * @param query
-   * @param projections
-   * @param archived
+   * @param opts
    */
-  async byQuery(query: any, projections?: any): Promise<T> {
+  async byQuery(
+    query: any,
+    opts?: { projections?: any; populations?: any }
+  ): Promise<T> {
     return this.model
       .findOne({ ...query, deleted_at: undefined })
-      .select(projections)
+      .select(opts?.projections)
+      .populate(opts?.populations)
       .exec();
   }
 

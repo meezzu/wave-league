@@ -31,8 +31,11 @@ export interface Query {
 
 export interface Repository<T> {
   create(attributes: T): Promise<T>;
-  byID(id: string, projections?: any, archived?: boolean): Promise<T>;
-  byQuery(query: any, projections?: any, archived?: boolean);
+  byID(id: string, opts: { projections?: any; populations?: any }): Promise<T>;
+  byQuery(
+    query: any,
+    opts: { projections?: any; populations?: any }
+  ): Promise<T>;
   getPaged(query: PaginationQuery): Promise<QueryResult<T>>;
   get(query: Query): Promise<T[]>;
   update(condition: string | object, update: any): Promise<T>;

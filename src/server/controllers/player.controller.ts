@@ -76,7 +76,15 @@ export class PlayerController extends BaseController {
 
   getSquad = async (req: Request, res: Response) => {
     try {
-      const squad = await SquadRepo.byQuery({ player: req.user });
+      const squad = await SquadRepo.byQuery(
+        { player: req.user },
+        {
+          populations: {
+            path: 'artistes',
+            select: 'price avatar artiste_name record_label'
+          }
+        }
+      );
       this.handleSuccess(req, res, squad);
     } catch (error) {
       this.handleError(req, res, error);
