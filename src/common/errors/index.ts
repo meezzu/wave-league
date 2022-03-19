@@ -164,3 +164,14 @@ export class SquadFilledError extends ControllerError {
     this.error_code = 303;
   }
 }
+
+export class SquadWillBeFilledError extends ControllerError {
+  constructor() {
+    const errorMessage =
+      'your squad will have too many artistes, max squad size is 8';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 304;
+  }
+}

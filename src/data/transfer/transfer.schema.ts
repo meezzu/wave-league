@@ -1,8 +1,17 @@
-import { requiredNumber, SchemaFactory } from '../base';
+import {
+  requiredNumber,
+  SchemaFactory,
+  trimmedRequiredLowercaseString
+} from '../base';
 import { SchemaTypes } from 'mongoose';
 import { ITransfer } from './transfer.model';
 
 const TransferSchema = SchemaFactory<ITransfer>({
+  transfer_type: {
+    ...trimmedRequiredLowercaseString,
+    enum: ['in', 'out'],
+    default: 'in'
+  },
   transfer_value: { ...requiredNumber },
   artiste: {
     type: SchemaTypes.String,

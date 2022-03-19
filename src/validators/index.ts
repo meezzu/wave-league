@@ -32,6 +32,10 @@ export const updateSquad = joi.object({
   squad_name: requiredString
 });
 
+export const artistesOnly = joi.object({
+  artistes: joi.array().items(requiredString).required()
+});
+
 export const createWeek = joi.object({
   week_number: requiredNumber,
   start_date: requiredDate,

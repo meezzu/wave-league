@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import validator from '../server/middleware/validator';
 import {
+  artistesOnly,
   createArtiste,
   createPoint,
   createSquad,
@@ -53,11 +54,17 @@ v1Router
     gateman.guard(),
     squads.weekTransfers
   )
-  .post('/squads/:id/artiste/:aid/add', gateman.guard(), squads.addArtiste)
   .post(
-    '/squads/:id/artiste/:aid/remove',
+    '/squads/:id/add-artistes',
     gateman.guard(),
-    squads.removeArtiste
+    validator(artistesOnly),
+    squads.addArtistes
+  )
+  .post(
+    '/squads/:id/remove-artistes',
+    gateman.guard(),
+    validator(artistesOnly),
+    squads.removeArtistes
   );
 
 v1Router

@@ -7,4 +7,5 @@ class TransferRepository extends BaseRepository<ITransfer> {
     super('Transfer', TransferSchema);
   }
 }
+
 export const TransferRepo = new TransferRepository();

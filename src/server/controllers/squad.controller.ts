@@ -61,11 +61,11 @@ export class SquadController extends BaseController {
     }
   };
 
-  removeArtiste = async (req: Request, res: Response) => {
+  removeArtistes = async (req: Request, res: Response) => {
     try {
       const squad = await SquadRepo.removeArtiste(
         req.params.id,
-        req.params.aid
+        req.body.artistes
       );
 
       this.handleSuccess(req, res, squad);
@@ -74,9 +74,12 @@ export class SquadController extends BaseController {
     }
   };
 
-  addArtiste = async (req: Request, res: Response) => {
+  addArtistes = async (req: Request, res: Response) => {
     try {
-      const squad = await SquadRepo.addArtiste(req.params.id, req.params.aid);
+      const squad = await SquadRepo.addArtiste(
+        req.params.id,
+        req.body.artistes
+      );
 
       this.handleSuccess(req, res, squad);
     } catch (error) {
