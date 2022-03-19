@@ -58,3 +58,8 @@ export const paginate = joi.object({
   page: optionalNumber.default(1),
   per_page: optionalNumber.default(20)
 });
+
+export const replaceArtistes = joi.object({
+  in: requiredString,
+  out: requiredString
+});

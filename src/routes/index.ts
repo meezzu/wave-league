@@ -8,6 +8,7 @@ import {
   createWeek,
   login,
   paginate,
+  replaceArtistes,
   signup,
   updateSquad
 } from '../validators';
@@ -59,6 +60,12 @@ v1Router
     gateman.guard(),
     validator(artistesOnly),
     squads.addArtistes
+  )
+  .post(
+    '/squads/:id/replace-artistes',
+    gateman.guard(),
+    validator(replaceArtistes),
+    squads.replaceArtistes
   )
   .post(
     '/squads/:id/remove-artistes',

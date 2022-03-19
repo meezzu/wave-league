@@ -87,6 +87,20 @@ export class SquadController extends BaseController {
     }
   };
 
+  replaceArtistes = async (req: Request, res: Response) => {
+    try {
+      const squad = await SquadRepo.replaceArtistes(
+        req.params.id,
+        req.body.in,
+        req.body.out
+      );
+
+      this.handleSuccess(req, res, squad);
+    } catch (error) {
+      this.handleError(req, res, error);
+    }
+  };
+
   transfers = async (req: Request, res: Response) => {
     try {
       const transfers = await TransferRepo.getPaged({
