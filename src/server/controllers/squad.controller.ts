@@ -63,7 +63,7 @@ export class SquadController extends BaseController {
 
   removeArtistes = async (req: Request, res: Response) => {
     try {
-      const squad = await SquadRepo.removeArtiste(
+      const squad = await SquadRepo.removeArtistes(
         req.params.id,
         req.body.artistes
       );
@@ -76,7 +76,7 @@ export class SquadController extends BaseController {
 
   addArtistes = async (req: Request, res: Response) => {
     try {
-      const squad = await SquadRepo.addArtiste(
+      const squad = await SquadRepo.addArtistes(
         req.params.id,
         req.body.artistes
       );

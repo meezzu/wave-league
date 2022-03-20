@@ -33,7 +33,10 @@ export class BaseRepository<T> implements Repository<T> {
    * @param id
    * @param opts
    */
-  byID(id: string, opts?: { projections?: any; populations?: any }): Promise<T> {
+  byID(
+    id: string,
+    opts?: { projections?: any; populations?: any }
+  ): Promise<T> {
     const query = this.getQuery(id);
     return this.model
       .findOne(query)
@@ -60,13 +63,14 @@ export class BaseRepository<T> implements Repository<T> {
 
   /**
    * Finds all documents that match a query
-   * @param query
+   * @param q
    */
-  get(query: Query): Promise<T[]> {
-    const sort = query.sort || 'created_at';
+  get(q: Query): Promise<T[]> {
+    const sort = q.sort || 'created_at';
     return this.model
-      .find({ ...query.conditions, deleted_at: undefined })
-      .select(query.projections)
+      .find({ ...q.query, deleted_at: undefined })
+      .select(q.projections)
+      .populate(q.populations)
       .sort(sort)
       .exec();
   }

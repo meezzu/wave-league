@@ -175,3 +175,33 @@ export class SquadWillBeFilledError extends ControllerError {
     this.error_code = 304;
   }
 }
+
+export class ArtiteNotExistsError extends ControllerError {
+  constructor(id: string) {
+    const errorMessage = `artiste with id: (${id}) does not exist`;
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 203;
+  }
+}
+
+export class ArtiteNotInSquadError extends ControllerError {
+  constructor(id: string) {
+    const errorMessage = `artiste with id: (${id}) is not in this squad`;
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 204;
+  }
+}
+
+export class ArtiteAlreadyInSquadError extends ControllerError {
+  constructor(id: string) {
+    const errorMessage = `artiste with id: (${id}) is already in this squad`;
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 204;
+  }
+}

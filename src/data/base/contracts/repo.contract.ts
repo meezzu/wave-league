@@ -24,8 +24,9 @@ export interface PaginationQuery {
  * A repository query
  */
 export interface Query {
-  conditions: any;
+  query: any;
   projections?: any;
+  populations?: any;
   sort?: string | object;
 }
 
