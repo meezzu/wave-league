@@ -6,7 +6,6 @@ import env from '../common/config/env';
 import logger from '../common/services/logger';
 import { jobRunner } from '../jobs';
 import {
-  CRON_DAILY_1_AM_UTC,
   CRON_DAILY_MIDNIGHT_UTC,
   JOB_POINTS_ASSIGN,
   JOB_WEEKS_CREATE
@@ -26,7 +25,7 @@ const start = async () => {
 
     // set cron interval
     await jobRunner.every(CRON_DAILY_MIDNIGHT_UTC, JOB_WEEKS_CREATE);
-    await jobRunner.every(CRON_DAILY_1_AM_UTC, JOB_POINTS_ASSIGN);
+    await jobRunner.every(CRON_DAILY_MIDNIGHT_UTC, JOB_POINTS_ASSIGN);
 
     db.connection.once('close', async () => {
       await jobRunner.stop();
