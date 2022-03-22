@@ -45,7 +45,7 @@
     "typescript": "^3.2.2"
   },
   "devDependencies": {
-    "@types/agenda": "^3.1.0",
+    "@types/agenda": "^3.0.2",
     "@types/amqplib": "^0.8.1",
     "@types/axios": "^0.14.0",
     "@types/bunyan": "^1.8.5",
