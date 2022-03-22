@@ -205,3 +205,13 @@ export class ArtiteAlreadyInSquadError extends ControllerError {
     this.error_code = 204;
   }
 }
+
+export class WeekNotFoundError extends ControllerError {
+  constructor(week_number: number) {
+    const errorMessage = `week (${week_number}) does not exist`;
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 203;
+  }
+}

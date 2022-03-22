@@ -6,6 +6,7 @@ import { WeekRepo } from '../data/week';
 import faker from 'faker';
 import { PointRepo } from '../data/point';
 import { Day } from '../common/constants';
+import { WeekNotFoundError } from '../common/errors';
 
 export async function createWeek(message: ConsumeMessage) {
   checkConsumerCancelNotification(message);
@@ -43,6 +44,10 @@ export async function assignPointsToArtist(message: ConsumeMessage) {
     const week = await WeekRepo.byQuery({
       week_number: payload.week_number
     });
+
+    if (!week) {
+      throw new WeekNotFoundError(payload.week_number);
+    }
 
     await PointRepo.create({
       points: faker.random.number({ min: 0, max: 100 }),
