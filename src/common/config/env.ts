@@ -36,7 +36,6 @@ const env = {
   app_env: process.env.APP_ENV || 'development',
 
   port: Number(process.env.PORT),
-  worker_port: process.env.WORKER_PORT,
   salt_rounds: Number(process.env.SALT_ROUNDS) || 10,
 
   amqp_url: process.env.AMQP_URL,

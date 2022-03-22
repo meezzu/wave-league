@@ -15,7 +15,7 @@ const app = express();
  */
 export const startWorker = async () => {
   try {
-    if (!env.worker_port)
+    if (!env.port)
       throw new Error('Worker http port not specified. Exiting...');
 
     await db.connect();
@@ -38,10 +38,10 @@ export const startWorker = async () => {
     app.get('/', (req: Request, res: Response) => {
       res.status(200).json({ status: 'UP' });
     });
-    httpServer = app.listen(env.worker_port);
+    httpServer = app.listen(env.port);
 
     logger.message(
-      `📇  waveleague-worker ready!. Health check on port ${env.worker_port}`
+      `📇  waveleague-worker ready!. Health check on port ${env.port}`
     );
   } catch (err) {
     logger.error(err);
