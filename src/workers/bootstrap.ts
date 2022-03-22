@@ -5,7 +5,7 @@ import logger from '../common/services/logger';
 import { subscriber } from '@random-guys/eventbus';
 import redis from '../common/services/redis';
 import db from '../server/db';
-import updateUserAccount from './updateUserAccount';
+import { assignPointsToArtist, createWeek } from './handlers';
 
 let httpServer: http.Server;
 const app = express();
@@ -22,6 +22,7 @@ export const startWorker = async () => {
     logger.message('📦  MongoDB Connected!');
 
     await subscriber.init(env.amqp_url);
+    logger.message('🚎  Event Bus Publisher ready!');
 
     const subscriberConnection = subscriber.getConnection();
     subscriberConnection.on('error', (err: Error) => {
@@ -30,13 +31,8 @@ export const startWorker = async () => {
     });
 
     // Attach handlers
-    await subscriber.on(
-      'events',
-      'user.updated',
-      'UPDATE_USER_ACCOUNT_QUEUE',
-      updateUserAccount,
-      10
-    );
+    await subscriber.consume('weeks.create', createWeek);
+    await subscriber.consume('weeks.points.assign', assignPointsToArtist, 10);
 
     // Start simple server for k8s health check
     app.get('/', (req: Request, res: Response) => {

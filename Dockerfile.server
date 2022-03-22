@@ -18,4 +18,4 @@ COPY --from=Base /app .
 
 RUN yarn build:tsc
 
-CMD [ "yarn", "start:worker" ]
+CMD [ "yarn", "start" ]
