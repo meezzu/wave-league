@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import http from 'http';
 import env from '../common/config/env';
 import logger from '../common/services/logger';
+import { QUEUE_POINTS_ASSIGN, QUEUE_WEEKS_CREATE } from '../common/constants';
 import { subscriber } from '@random-guys/eventbus';
 import redis from '../common/services/redis';
 import db from '../server/db';
@@ -15,8 +16,10 @@ const app = express();
  */
 export const startWorker = async () => {
   try {
-    if (!env.port)
+    if (!env.worker_port && !env.port)
       throw new Error('Worker http port not specified. Exiting...');
+
+    const port = env.worker_port || env.port;
 
     await db.connect();
     logger.message('📦  MongoDB Connected!');
@@ -31,17 +34,17 @@ export const startWorker = async () => {
     });
 
     // Attach handlers
-    await subscriber.consume('weeks.create', createWeek);
-    await subscriber.consume('weeks.points.assign', assignPointsToArtist, 10);
+    await subscriber.consume(QUEUE_WEEKS_CREATE, createWeek);
+    await subscriber.consume(QUEUE_POINTS_ASSIGN, assignPointsToArtist, 10);
 
     // Start simple server for k8s health check
     app.get('/', (req: Request, res: Response) => {
       res.status(200).json({ status: 'UP' });
     });
-    httpServer = app.listen(env.port);
+    httpServer = app.listen(port);
 
     logger.message(
-      `📇  waveleague-worker ready!. Health check on port ${env.port}`
+      `📇  waveleague-worker ready!. Health check on port ${port}`
     );
   } catch (err) {
     logger.error(err);

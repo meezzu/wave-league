@@ -22,6 +22,7 @@
     "@random-guys/gateman": "^2.0.0",
     "@random-guys/iris": "^1.1.0",
     "@random-guys/omi": "^0.0.2",
+    "agenda": "^3.1.0",
     "amqplib": "^0.5.6",
     "axios": "^0.19.2",
     "bunyan": "^1.8.12",
@@ -44,6 +45,7 @@
     "typescript": "^3.2.2"
   },
   "devDependencies": {
+    "@types/agenda": "^3.1.0",
     "@types/amqplib": "^0.8.1",
     "@types/axios": "^0.14.0",
     "@types/bunyan": "^1.8.5",

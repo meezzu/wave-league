@@ -5,6 +5,7 @@ import logger from '../common/services/logger';
 import { WeekRepo } from '../data/week';
 import faker from 'faker';
 import { PointRepo } from '../data/point';
+import { Day } from '../common/constants';
 
 export async function createWeek(message: ConsumeMessage) {
   checkConsumerCancelNotification(message);
@@ -17,7 +18,7 @@ export async function createWeek(message: ConsumeMessage) {
     await WeekRepo.create({
       week_number: payload.week_number,
       start_date: new Date(),
-      end_date: new Date()
+      end_date: new Date(Date.now() + Day)
     } as any);
 
     subscriber.acknowledgeMessage(message);
