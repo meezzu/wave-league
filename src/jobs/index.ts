@@ -9,7 +9,6 @@ import {
 } from '../common/constants';
 import { ArtisteRepo } from '../data/artiste';
 import { WeekRepo } from '../data/week';
-import db from 'server/db';
 
 export const REMINDER_JOB = 'DAILY_REMINDER_JOB';
 
@@ -17,9 +16,6 @@ export const jobRunner = new Agenda({
   //@ts-ignore
   mongo: mongoose.connection,
   processEvery: '1d'
-  db: {
-    collection: "jobs"
-  }
 });
 
 jobRunner.define(JOB_WEEKS_CREATE, async function name(job: Job) {
