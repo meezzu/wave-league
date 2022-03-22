@@ -23,7 +23,7 @@ jobs:
         run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
 
       - name: Build image
-        run: docker build -t $REPO/wave-league:$(echo $GITHUB_SHA | head -c7) Dockerfile.server
+        run: docker build -f Dockerfile.server -t $REPO/wave-league:$(echo $GITHUB_SHA | head -c7) .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
