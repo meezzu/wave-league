@@ -9,7 +9,8 @@ export class TransferController extends BaseController {
         populations: [
           { path: 'squad', select: 'squad_name' },
           { path: 'artiste', select: 'artiste_name' }
-        ]
+        ],
+        ...req.query
       });
 
       this.handleSuccess(req, res, transfers);

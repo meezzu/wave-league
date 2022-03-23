@@ -7,7 +7,7 @@ import { SquadRepo } from '../../data/squad';
 export class PlayerController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const players = await PlayerRepo.get({ query: {} });
+      const players = await PlayerRepo.getPaged(req.query);
       this.handleSuccess(req, res, players);
     } catch (error) {
       this.handleError(req, res, error);

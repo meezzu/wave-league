@@ -50,6 +50,7 @@ v1Router
   .get('/squads/:id', gateman.guard(), squads.getOne)
   .put('/squads/:id', gateman.guard(), validator(updateSquad), squads.update)
   .get('/squads/:id/transfers', gateman.guard(), squads.transfers)
+  .post('/squad/:id/substitute', gateman.guard(), squads.transfers)
   .get(
     '/squads/:id/weeks/:wid/transfers',
     gateman.guard(),
@@ -66,6 +67,12 @@ v1Router
     gateman.guard(),
     validator(replaceArtistes),
     squads.replaceArtistes
+  )
+  .post(
+    '/squads/:id/substitute',
+    gateman.guard(),
+    validator(replaceArtistes),
+    squads.substitute
   )
   .post(
     '/squads/:id/remove-artistes',

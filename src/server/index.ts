@@ -1,15 +1,15 @@
-import http from 'http';
 import { publisher } from '@random-guys/eventbus';
-import App from './app';
-import db from './db';
+import http from 'http';
 import env from '../common/config/env';
-import logger from '../common/services/logger';
-import { jobRunner } from '../jobs';
 import {
   CRON_DAILY_MIDNIGHT_UTC,
   JOB_POINTS_ASSIGN,
   JOB_WEEKS_CREATE
 } from '../common/constants';
+import logger from '../common/services/logger';
+import { jobRunner } from '../jobs';
+import App from './app';
+import db from './db';
 
 const start = async () => {
   try {

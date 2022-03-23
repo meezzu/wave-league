@@ -5,7 +5,9 @@ import { PointRepo } from '../../data/point';
 export class PointsController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
-      const points = await PointRepo.getPaged();
+      const points = await PointRepo.getPaged({
+        ...req.query
+      });
 
       this.handleSuccess(req, res, points);
     } catch (error) {

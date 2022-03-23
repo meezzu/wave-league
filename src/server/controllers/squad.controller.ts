@@ -83,6 +83,7 @@ export class SquadController extends BaseController {
 
       this.handleSuccess(req, res, squad);
     } catch (error) {
+      console.log(error, error.code);
       this.handleError(req, res, error);
     }
   };
@@ -101,10 +102,26 @@ export class SquadController extends BaseController {
     }
   };
 
+  substitute = async (req: Request, res: Response) => {
+    try {
+      const squad = await SquadRepo.substitute(
+        req.params.id,
+        req.body.in,
+        req.body.out
+      );
+
+      this.handleSuccess(req, res, squad);
+    } catch (error) {
+      this.handleError(req, res, error);
+    }
+  };
+
   transfers = async (req: Request, res: Response) => {
     try {
       const transfers = await TransferRepo.getPaged({
-        query: { squad: req.params.id }
+        query: { squad: req.params.id },
+        page: Number(req.query.page),
+        per_page: Number(req.query.per_page)
       });
 
       this.handleSuccess(req, res, transfers);
@@ -116,7 +133,8 @@ export class SquadController extends BaseController {
   weekTransfers = async (req: Request, res: Response) => {
     try {
       const transfers = await TransferRepo.getPaged({
-        query: { squad: req.params.id, week: req.params.wid }
+        query: { squad: req.params.id, week: req.params.wid },
+        ...req.query
       });
 
       this.handleSuccess(req, res, transfers);

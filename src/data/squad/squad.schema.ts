@@ -1,4 +1,9 @@
-import { requiredNumber, SchemaFactory, trimmedRequiredString } from '../base';
+import {
+  requiredNumber,
+  SchemaFactory,
+  trimmedRequiredString,
+  requiredBoolean
+} from '../base';
 import { SchemaTypes } from 'mongoose';
 import { ISquad } from './squad.model';
 
@@ -8,9 +13,12 @@ const SquadSchema = SchemaFactory<ISquad>({
   in_the_bank: { ...requiredNumber, default: 0 },
   artistes: [
     {
-      type: SchemaTypes.String,
-      ref: 'Artiste',
-      required: true
+      artiste_id: {
+        type: SchemaTypes.String,
+        ref: 'Artiste',
+        required: true
+      },
+      is_on_stage: { ...requiredBoolean, default: false }
     }
   ],
   player: {

@@ -75,6 +75,11 @@ export const requiredNumber = {
   required: true
 };
 
+export const requiredBoolean = {
+  type: SchemaTypes.Boolean,
+  required: true
+};
+
 export const requiredDate = {
   type: SchemaTypes.Date,
   required: true

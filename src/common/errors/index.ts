@@ -176,7 +176,7 @@ export class SquadWillBeFilledError extends ControllerError {
   }
 }
 
-export class ArtiteNotExistsError extends ControllerError {
+export class ArtisteNotExistsError extends ControllerError {
   constructor(id: string) {
     const errorMessage = `artiste with id: (${id}) does not exist`;
     super(errorMessage);
@@ -186,7 +186,7 @@ export class ArtiteNotExistsError extends ControllerError {
   }
 }
 
-export class ArtiteNotInSquadError extends ControllerError {
+export class ArtisteNotInSquadError extends ControllerError {
   constructor(id: string) {
     const errorMessage = `artiste with id: (${id}) is not in this squad`;
     super(errorMessage);
@@ -196,7 +196,7 @@ export class ArtiteNotInSquadError extends ControllerError {
   }
 }
 
-export class ArtiteAlreadyInSquadError extends ControllerError {
+export class ArtisteAlreadyInSquadError extends ControllerError {
   constructor(id: string) {
     const errorMessage = `artiste with id: (${id}) is already in this squad`;
     super(errorMessage);
@@ -212,6 +212,6 @@ export class WeekNotFoundError extends ControllerError {
     super(errorMessage);
 
     this.code = BAD_REQUEST;
-    this.error_code = 203;
+    this.error_code = 103;
   }
 }
