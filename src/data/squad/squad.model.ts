@@ -12,6 +12,6 @@ export interface ISquad extends Document {
 }
 
 export interface OnStageArtiste {
-  artiste_id: string;
+  artiste: string;
   is_on_stage: boolean;
 }
