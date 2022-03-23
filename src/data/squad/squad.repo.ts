@@ -24,7 +24,7 @@ class SquadRepository extends BaseRepository<ISquad> {
       populations: [
         { path: 'player', select: 'player_name' },
         {
-          path: 'artistes.artiste_id',
+          path: 'artistes.artiste',
           select: 'price avatar artiste_name record_label'
         }
       ]
@@ -55,7 +55,7 @@ class SquadRepository extends BaseRepository<ISquad> {
 
     // check if the artistes we're adding are already in the squad
     for (const it of artistes) {
-      if (squad.artistes.map((it) => it.artiste_id).includes(it)) {
+      if (squad.artistes.map((it) => it.artiste).includes(it)) {
         throw new ArtisteAlreadyInSquadError(it);
       }
     }
@@ -68,7 +68,7 @@ class SquadRepository extends BaseRepository<ISquad> {
             { _id: id },
             {
               $addToSet: {
-                artistes: { artiste_id: aid, is_on_stage: true }
+                artistes: { artiste: aid, is_on_stage: true }
               }
             },
             { session }
@@ -117,7 +117,7 @@ class SquadRepository extends BaseRepository<ISquad> {
 
     // check if the artistes we're removing are in the squad
     for (const it of artistes) {
-      if (!squad.artistes.map((it) => it.artiste_id).includes(it)) {
+      if (!squad.artistes.map((it) => it.artiste).includes(it)) {
         throw new ArtisteNotInSquadError(it);
       }
     }
@@ -128,7 +128,7 @@ class SquadRepository extends BaseRepository<ISquad> {
         await this.model
           .updateOne(
             { _id: id },
-            { $pull: { artistes: { artiste_id: aid } } },
+            { $pull: { artistes: { artiste: aid } } },
             { session }
           )
           .exec();
@@ -165,11 +165,11 @@ class SquadRepository extends BaseRepository<ISquad> {
     if (!artOut) throw new ArtisteNotExistsError(artisteIn);
     if (!artIn) throw new ArtisteNotExistsError(artisteOut);
 
-    if (!squad.artistes.map((it) => it.artiste_id).includes(artisteOut)) {
+    if (!squad.artistes.map((it) => it.artiste).includes(artisteOut)) {
       throw new ArtisteNotInSquadError(artisteOut);
     }
 
-    if (squad.artistes.map((it) => it.artiste_id).includes(artisteIn)) {
+    if (squad.artistes.map((it) => it.artiste).includes(artisteIn)) {
       throw new ArtisteAlreadyInSquadError(artisteIn);
     }
 
@@ -181,7 +181,7 @@ class SquadRepository extends BaseRepository<ISquad> {
             { _id: id },
             {
               $addToSet: {
-                artistes: { artiste_id: artisteIn, is_on_stage: false }
+                artistes: { artiste: artisteIn, is_on_stage: false }
               }
             },
             { session }
@@ -190,7 +190,7 @@ class SquadRepository extends BaseRepository<ISquad> {
         this.model
           .updateOne(
             { _id: id },
-            { $pull: { artistes: { artiste_id: artisteOut } } },
+            { $pull: { artistes: { artiste: artisteOut } } },
             { session }
           )
           .exec(),
@@ -231,7 +231,7 @@ class SquadRepository extends BaseRepository<ISquad> {
     if (!artOut) throw new ArtisteNotExistsError(artisteIn);
     if (!artIn) throw new ArtisteNotExistsError(artisteOut);
 
-    const squadArtistes = squad.artistes.map((it) => it.artiste_id);
+    const squadArtistes = squad.artistes.map((it) => it.artiste);
     if (!squadArtistes.includes(artisteOut)) {
       throw new ArtisteNotInSquadError(artisteOut);
     }
@@ -245,14 +245,14 @@ class SquadRepository extends BaseRepository<ISquad> {
       await Promise.all([
         this.model
           .updateOne(
-            { _id: id, 'artistes.artiste_id': artisteIn },
+            { _id: id, 'artistes.artiste': artisteIn },
             { $set: { 'artistes.$.is_on_stage': true } },
             { session }
           )
           .exec(),
         this.model
           .updateOne(
-            { _id: id, 'artistes.artiste_id': artisteOut },
+            { _id: id, 'artistes.artiste': artisteOut },
             { $set: { 'artistes.$.is_on_stage': false } },
             { session }
           )

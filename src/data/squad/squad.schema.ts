@@ -13,7 +13,7 @@ const SquadSchema = SchemaFactory<ISquad>({
   in_the_bank: { ...requiredNumber, default: 0 },
   artistes: [
     {
-      artiste_id: {
+      artiste: {
         type: SchemaTypes.String,
         ref: 'Artiste',
         required: true
