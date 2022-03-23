@@ -1,6 +1,6 @@
 import { ArtisteRepo } from '../../data/artiste';
 import { TransferRepo } from '../../data/transfer';
-import { FilterQuery, startSession } from 'mongoose';
+import { startSession } from 'mongoose';
 import {
   ArtisteAlreadyInSquadError,
   ArtisteNotExistsError,
