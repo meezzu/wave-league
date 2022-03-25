@@ -80,6 +80,11 @@ export const requiredBoolean = {
   required: true
 };
 
+export const optionalBoolean = {
+  type: SchemaTypes.Boolean,
+  required: true
+};
+
 export const requiredDate = {
   type: SchemaTypes.Date,
   required: true

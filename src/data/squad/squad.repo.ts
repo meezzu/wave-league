@@ -24,7 +24,7 @@ class SquadRepository extends BaseRepository<ISquad> {
       populations: [
         { path: 'player', select: 'player_name' },
         {
-          path: 'artistes.artiste',
+          path: 'artistes',
           select: 'price avatar artiste_name record_label'
         }
       ]
@@ -55,7 +55,7 @@ class SquadRepository extends BaseRepository<ISquad> {
 
     // check if the artistes we're adding are already in the squad
     for (const it of artistes) {
-      if (squad.artistes.map((it) => it.artiste).includes(it)) {
+      if (squad.artistes.includes(it)) {
         throw new ArtisteAlreadyInSquadError(it);
       }
     }
@@ -63,17 +63,10 @@ class SquadRepository extends BaseRepository<ISquad> {
     const session = await startSession();
     await session.withTransaction(async () => {
       for (const aid of artistes) {
-        await this.model
-          .updateOne(
-            { _id: id },
-            {
-              $addToSet: {
-                artistes: { artiste: aid, is_on_stage: true }
-              }
-            },
-            { session }
-          )
-          .exec();
+        squad.artistes.push(aid);
+        squad.roster.push({ artiste: aid, location: 'stage' });
+
+        await squad.save({ session });
 
         const artist = await ArtisteRepo.byID(aid);
         await TransferRepo.getModel().create(
@@ -117,7 +110,7 @@ class SquadRepository extends BaseRepository<ISquad> {
 
     // check if the artistes we're removing are in the squad
     for (const it of artistes) {
-      if (!squad.artistes.map((it) => it.artiste).includes(it)) {
+      if (!squad.artistes.includes(it)) {
         throw new ArtisteNotInSquadError(it);
       }
     }
@@ -126,11 +119,7 @@ class SquadRepository extends BaseRepository<ISquad> {
     await session.withTransaction(async () => {
       for (const aid of artistes) {
         await this.model
-          .updateOne(
-            { _id: id },
-            { $pull: { artistes: { artiste: aid } } },
-            { session }
-          )
+          .updateOne({ _id: id }, { $pull: { artistes: aid } }, { session })
           .exec();
 
         const artist = await ArtisteRepo.byID(aid);
@@ -165,11 +154,11 @@ class SquadRepository extends BaseRepository<ISquad> {
     if (!artOut) throw new ArtisteNotExistsError(artisteIn);
     if (!artIn) throw new ArtisteNotExistsError(artisteOut);
 
-    if (!squad.artistes.map((it) => it.artiste).includes(artisteOut)) {
+    if (!squad.artistes.includes(artisteOut)) {
       throw new ArtisteNotInSquadError(artisteOut);
     }
 
-    if (squad.artistes.map((it) => it.artiste).includes(artisteIn)) {
+    if (squad.artistes.includes(artisteIn)) {
       throw new ArtisteAlreadyInSquadError(artisteIn);
     }
 
@@ -181,7 +170,7 @@ class SquadRepository extends BaseRepository<ISquad> {
             { _id: id },
             {
               $addToSet: {
-                artistes: { artiste: artisteIn, is_on_stage: false }
+                artistes: artisteIn
               }
             },
             { session }
@@ -190,7 +179,7 @@ class SquadRepository extends BaseRepository<ISquad> {
         this.model
           .updateOne(
             { _id: id },
-            { $pull: { artistes: { artiste: artisteOut } } },
+            { $pull: { artistes: artisteOut } },
             { session }
           )
           .exec(),
@@ -231,7 +220,7 @@ class SquadRepository extends BaseRepository<ISquad> {
     if (!artOut) throw new ArtisteNotExistsError(artisteIn);
     if (!artIn) throw new ArtisteNotExistsError(artisteOut);
 
-    const squadArtistes = squad.artistes.map((it) => it.artiste);
+    const squadArtistes = squad.artistes;
     if (!squadArtistes.includes(artisteOut)) {
       throw new ArtisteNotInSquadError(artisteOut);
     }
@@ -245,14 +234,14 @@ class SquadRepository extends BaseRepository<ISquad> {
       await Promise.all([
         this.model
           .updateOne(
-            { _id: id, 'artistes.artiste': artisteIn },
+            { _id: id, artistes: artisteIn },
             { $set: { 'artistes.$.is_on_stage': true } },
             { session }
           )
           .exec(),
         this.model
           .updateOne(
-            { _id: id, 'artistes.artiste': artisteOut },
+            { _id: id, artistes: artisteOut },
             { $set: { 'artistes.$.is_on_stage': false } },
             { session }
           )

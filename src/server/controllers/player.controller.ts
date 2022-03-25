@@ -80,7 +80,7 @@ export class PlayerController extends BaseController {
         { player: req.user },
         {
           populations: {
-            path: 'artistes.artiste',
+            path: 'artistes',
             select: 'price avatar artiste_name record_label'
           }
         }

@@ -6,12 +6,13 @@ export interface ISquad extends Document {
   total_rank: number;
   squad_value: number;
   in_the_bank: number;
-  artistes: OnStageArtiste[];
+  artistes: string[];
   player: string;
   leagues: string;
+  roster: Roster[];
 }
 
-export interface OnStageArtiste {
+export interface Roster {
   artiste: string;
-  is_on_stage: boolean;
+  location: 'stage' | 'bench';
 }
