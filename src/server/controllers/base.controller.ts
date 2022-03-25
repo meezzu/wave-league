@@ -1,4 +1,3 @@
-import { IrisAPIError } from '@random-guys/iris';
 import { Request, Response } from 'express';
 import HttpStatus from 'http-status-codes';
 import { ControllerError } from '../../common/errors';
@@ -32,12 +31,7 @@ export class BaseController {
    * @param error Error object
    * @param message Optional error message. Useful for hiding internal errors from clients.
    */
-  handleError = (
-    req: Request,
-    res: Response,
-    err: Error | IrisAPIError,
-    message?: string
-  ) => {
+  handleError = (req: Request, res: Response, err: Error, message?: string) => {
     /**
      * Useful when we call an asynchrous function that might throw
      * after we've sent a response to client
@@ -50,12 +44,7 @@ export class BaseController {
     //@ts-ignore
     const { data, error_code, code } = <ControllerError>err;
 
-    const irisErrormessage =
-      err instanceof IrisAPIError && err.data.message
-        ? err.data.message
-        : undefined;
-
-    const errorMessage = irisErrormessage || err.message || message;
+    const errorMessage = err.message || message;
 
     res.jSend.error(null, errorMessage, code, data?.error_code || error_code);
     logger.logAPIError(req, res, err);

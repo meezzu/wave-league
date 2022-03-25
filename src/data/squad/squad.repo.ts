@@ -20,7 +20,7 @@ class SquadRepository extends BaseRepository<ISquad> {
   }
 
   async getOne(id: string) {
-    return this.byID(id, {
+    const squad = await this.byID(id, {
       populations: [
         { path: 'player', select: 'player_name' },
         {
@@ -29,6 +29,18 @@ class SquadRepository extends BaseRepository<ISquad> {
         }
       ]
     });
+
+    const { artistes, roster, ...rest } = squad['_doc'];
+
+    const moddedArtistes = [];
+    for (const art of artistes) {
+      const x = roster.find(it => it.artiste === art['_id']);
+      moddedArtistes.push({ ...art['_doc'], location: x.location });
+    }
+
+    rest['artistes'] = moddedArtistes;
+
+    return rest;
   }
 
   async addArtistes(id: string, artistes: string[]) {
@@ -44,7 +56,7 @@ class SquadRepository extends BaseRepository<ISquad> {
 
     const absentArtistes = xor(
       artistes,
-      artistesArray.map((it) => it['_id'])
+      artistesArray.map(it => it['_id'])
     );
 
     // checks if an invalid artiste id was passed
@@ -63,10 +75,20 @@ class SquadRepository extends BaseRepository<ISquad> {
     const session = await startSession();
     await session.withTransaction(async () => {
       for (const aid of artistes) {
-        squad.artistes.push(aid);
-        squad.roster.push({ artiste: aid, location: 'stage' });
-
-        await squad.save({ session });
+        await this.model
+          .updateOne(
+            { _id: id },
+            {
+              $addToSet: {
+                artistes: aid,
+                roster: {
+                  artiste: aid
+                }
+              }
+            },
+            { session, new: true }
+          )
+          .exec();
 
         const artist = await ArtisteRepo.byID(aid);
         await TransferRepo.getModel().create(
@@ -99,7 +121,7 @@ class SquadRepository extends BaseRepository<ISquad> {
 
     const absentArtistes = xor(
       artistes,
-      artitesArray.map((it) => it['_id'])
+      artitesArray.map(it => it['_id'])
     );
 
     // checks if an invalid artiste id was passed
@@ -119,7 +141,11 @@ class SquadRepository extends BaseRepository<ISquad> {
     await session.withTransaction(async () => {
       for (const aid of artistes) {
         await this.model
-          .updateOne({ _id: id }, { $pull: { artistes: aid } }, { session })
+          .updateOne(
+            { _id: id },
+            { $pull: { artistes: aid, roster: { artiste: aid } } },
+            { session }
+          )
           .exec();
 
         const artist = await ArtisteRepo.byID(aid);
@@ -234,15 +260,15 @@ class SquadRepository extends BaseRepository<ISquad> {
       await Promise.all([
         this.model
           .updateOne(
-            { _id: id, artistes: artisteIn },
-            { $set: { 'artistes.$.is_on_stage': true } },
+            { _id: id, 'roster.artiste': artisteIn },
+            { $set: { 'roster.$.location': 'stage' } },
             { session }
           )
           .exec(),
         this.model
           .updateOne(
-            { _id: id, artistes: artisteOut },
-            { $set: { 'artistes.$.is_on_stage': false } },
+            { _id: id, 'roster.artiste': artisteOut },
+            { $set: { 'roster.$.location': 'bench' } },
             { session }
           )
           .exec()

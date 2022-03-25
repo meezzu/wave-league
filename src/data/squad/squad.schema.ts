@@ -1,8 +1,9 @@
 import {
   requiredNumber,
   SchemaFactory,
-  trimmedRequiredLowercaseString,
-  trimmedRequiredString
+  trimmedLowercaseString,
+  trimmedRequiredString,
+  trimmedString
 } from '../base';
 import { ISquad } from './squad.model';
 
@@ -16,10 +17,16 @@ const SquadSchema = SchemaFactory<ISquad>({
       ref: 'Artiste'
     }
   ],
-  roster: {
-    artiste: { ...trimmedRequiredString },
-    location: { ...trimmedRequiredLowercaseString, enum: ['stage', 'bench'] }
-  },
+  roster: [
+    {
+      artiste: { ...trimmedString },
+      location: {
+        ...trimmedLowercaseString,
+        enum: ['stage', 'bench'],
+        default: 'stage'
+      }
+    }
+  ],
   player: {
     ...trimmedRequiredString,
     ref: 'Player',
