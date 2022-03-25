@@ -173,12 +173,12 @@ class SquadRepository extends BaseRepository<ISquad> {
     const [squad, artIn, artOut] = await Promise.all([
       this.byID(id),
       ArtisteRepo.byID(artisteIn),
-      ArtisteRepo.byID(artisteIn)
+      ArtisteRepo.byID(artisteOut)
     ]);
 
     if (!squad) throw new SquadNotExistsError();
-    if (!artOut) throw new ArtisteNotExistsError(artisteIn);
-    if (!artIn) throw new ArtisteNotExistsError(artisteOut);
+    if (!artIn) throw new ArtisteNotExistsError(artisteIn);
+    if (!artOut) throw new ArtisteNotExistsError(artisteOut);
 
     if (!squad.artistes.includes(artisteOut)) {
       throw new ArtisteNotInSquadError(artisteOut);
@@ -196,7 +196,10 @@ class SquadRepository extends BaseRepository<ISquad> {
             { _id: id },
             {
               $addToSet: {
-                artistes: artisteIn
+                artistes: artisteIn,
+                roster: {
+                  artiste: artisteIn
+                }
               }
             },
             { session }
@@ -205,7 +208,9 @@ class SquadRepository extends BaseRepository<ISquad> {
         this.model
           .updateOne(
             { _id: id },
-            { $pull: { artistes: artisteOut } },
+            {
+              $pull: { artistes: artisteOut, roster: { artiste: artisteOut } }
+            },
             { session }
           )
           .exec(),
@@ -239,12 +244,12 @@ class SquadRepository extends BaseRepository<ISquad> {
     let [squad, artIn, artOut] = await Promise.all([
       this.byID(id),
       ArtisteRepo.byID(artisteIn),
-      ArtisteRepo.byID(artisteIn)
+      ArtisteRepo.byID(artisteOut)
     ]);
 
     if (!squad) throw new SquadNotExistsError();
-    if (!artOut) throw new ArtisteNotExistsError(artisteIn);
-    if (!artIn) throw new ArtisteNotExistsError(artisteOut);
+    if (!artIn) throw new ArtisteNotExistsError(artisteIn);
+    if (!artOut) throw new ArtisteNotExistsError(artisteOut);
 
     const squadArtistes = squad.artistes;
     if (!squadArtistes.includes(artisteOut)) {
