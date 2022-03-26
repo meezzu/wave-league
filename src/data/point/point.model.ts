@@ -1,6 +1,6 @@
-import { Document } from 'mongoose';
+import { BaseModel } from 'data/base';
 
-export interface IPoint extends Document {
+export interface IPoint extends BaseModel {
   week: string;
   points: number;
   artiste: string;

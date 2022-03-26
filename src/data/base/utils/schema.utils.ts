@@ -1,5 +1,5 @@
+import { Document, SchemaTypes } from 'mongoose';
 import { customAlphabet } from 'nanoid';
-import { SchemaTypes } from 'mongoose';
 
 const nanoid = customAlphabet(
   '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
@@ -13,8 +13,8 @@ export const readMapper = {
     virtuals: true,
     versionKey: false,
     transform: (doc, ret, options) => {
-      if (ret.password) delete ret.password;
-      return ret;
+      const { password, __v, ...rest } = ret;
+      return rest;
     }
   }
 };
@@ -103,3 +103,8 @@ export const foreignKey = (relation: string) => ({
 });
 
 export const NIL_UUID = nanoid();
+
+export interface BaseModel extends Document {
+  _id: string;
+  deleted_at: Date;
+}

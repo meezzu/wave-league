@@ -30,6 +30,8 @@ class SquadRepository extends BaseRepository<ISquad> {
       ]
     });
 
+    if (!squad) throw new SquadNotExistsError();
+
     const { artistes, roster, ...rest } = squad['_doc'];
 
     const moddedArtistes = [];

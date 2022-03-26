@@ -2,6 +2,7 @@ import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { ArtisteRepo } from '../../data/artiste';
 import { PointRepo } from '../../data/point';
+import { WeekRepo } from '../../data/week';
 
 export class ArtisteController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -29,17 +30,31 @@ export class ArtisteController extends BaseController {
         ...max_price
       };
 
-      const artistes = await ArtisteRepo.getPaged({
-        query,
-        sort: req.query.sort || 'created_at',
-        page: Number(req.query.page),
-        per_page: Number(req.query.per_page)
+      const [artistes, thisWeek] = await Promise.all([
+        ArtisteRepo.getPaged({
+          query,
+          sort: req.query.sort || 'created_at',
+          page: Number(req.query.page),
+          per_page: Number(req.query.per_page)
+        }),
+        await WeekRepo.getModel().find().sort({ created_at: -1 }).limit(1)
+      ]);
+
+      const artistePoints = await PointRepo.get({
+        query: {
+          artiste: { $in: artistes.result.map(it => it._id) },
+          week_number: thisWeek[0].week_number
+        }
       });
 
-      artistes.result = artistes.result.map((it) => ({
-        ...it['_doc'],
-        points: 0
-      }));
+      artistes.result = artistes.result.map(it => {
+        const object = it.toObject() as any;
+        const points = artistePoints.filter(
+          point => point.artiste === it._id
+        )[0]?.points;
+
+        return { ...object, points };
+      });
 
       this.handleSuccess(req, res, artistes);
     } catch (error) {

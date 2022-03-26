@@ -8,4 +8,9 @@ const PointSchema = SchemaFactory<IPoint>({
   week: foreignKey('Week')
 });
 
+PointSchema.index({
+  artiste: 1,
+  week_number: 1
+});
+
 export default PointSchema;

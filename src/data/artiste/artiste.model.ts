@@ -1,7 +1,9 @@
-export interface IArtiste {
+import { BaseModel } from '../../data/base';
+
+export interface IArtiste extends BaseModel {
   artiste_name: string;
   record_label: string;
-  position?: string;
+  location?: 'stage' | 'bench';
   avatar: string;
   price: number;
 }
