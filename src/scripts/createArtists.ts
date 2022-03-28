@@ -28,10 +28,9 @@ omi.on(OmiEvent.ERROR, error => {
 
 for (let index = 0; index < 100; index++) {
   omi.addMany(
-    [...Array.from({ length: 100 })].map(() => {
+    [...Array.from({ length: 10 })].map(() => {
       return {
-        location: 'stage',
-        price: faker.random.number({ min: 50, max: 100 }),
+        price: faker.random.arrayElement([5, 10, 15, 20]),
         avatar: faker.image.people(),
         record_label: faker.random.arrayElement([
           'YBNL',

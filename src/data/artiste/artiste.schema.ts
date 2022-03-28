@@ -5,7 +5,7 @@ const ArtisteSchema = SchemaFactory<IArtiste>({
   artiste_name: { ...trimmedRequiredString },
   record_label: { ...trimmedRequiredString },
   avatar: { ...trimmedRequiredString },
-  price: { ...requiredNumber }
+  price: { ...requiredNumber, enum: [5, 10, 15, 20] }
 });
 
 ArtisteSchema.index({

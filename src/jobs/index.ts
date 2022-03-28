@@ -23,8 +23,11 @@ jobRunner.define(JOB_WEEKS_CREATE, async function name(job: Job) {
     .find()
     .sort({ created_at: -1 })
     .limit(1);
+
+  const week = lastWeek.length > 0 ? lastWeek[0].week_number : 0;
+
   await publisher.queue(QUEUE_WEEKS_CREATE, {
-    week_number: lastWeek[0].week_number + 1
+    week_number: week + 1
   });
 });
 
@@ -34,10 +37,12 @@ jobRunner.define(JOB_POINTS_ASSIGN, async function name(job: Job) {
     .sort({ created_at: -1 })
     .limit(1);
 
+  const week = lastWeek.length > 0 ? lastWeek[0].week_number : 0;
+
   const cursor = ArtisteRepo.getModel().find().lean().cursor();
-  await cursor.eachAsync(async (doc) => {
+  await cursor.eachAsync(async doc => {
     await publisher.queue(QUEUE_POINTS_ASSIGN, {
-      week_number: lastWeek[0].week_number + 1,
+      week_number: week + 1,
       artiste: doc._id
     });
   });

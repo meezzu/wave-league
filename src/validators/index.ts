@@ -4,7 +4,7 @@ const optionalString = joi.string().trim();
 const requiredString = optionalString.required();
 const requiredEmail = requiredString.email();
 const optionalNumber = joi.number().min(1).integer();
-const requiredNumber = optionalNumber.max(100).required();
+const requiredNumber = optionalNumber.required();
 const requiredDate = joi.date().required();
 
 export const signup = joi.object({
@@ -17,7 +17,7 @@ export const login = joi.object({
 });
 
 export const createArtiste = joi.object({
-  price: requiredNumber,
+  price: requiredNumber.max(20).multiple(5),
   avatar: requiredString,
   record_label: requiredString,
   artiste_name: requiredString
