@@ -1,4 +1,4 @@
-import { ArtisteRepo, IArtiste } from '../../data/artiste';
+import { ArtisteRepo } from '../../data/artiste';
 import { TransferRepo } from '../../data/transfer';
 import { startSession } from 'mongoose';
 import {
