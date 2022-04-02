@@ -215,3 +215,13 @@ export class WeekNotFoundError extends ControllerError {
     this.error_code = 103;
   }
 }
+
+export class ArtistesNotEnoughError extends ControllerError {
+  constructor() {
+    const errorMessage = `the number of artistes should be 8`;
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 205;
+  }
+}

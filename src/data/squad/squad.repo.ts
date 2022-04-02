@@ -1,10 +1,11 @@
-import { ArtisteRepo } from '../../data/artiste';
+import { ArtisteRepo, IArtiste } from '../../data/artiste';
 import { TransferRepo } from '../../data/transfer';
 import { startSession } from 'mongoose';
 import {
   ArtisteAlreadyInSquadError,
   ArtisteNotExistsError,
   ArtisteNotInSquadError,
+  ArtistesNotEnoughError,
   SquadFilledError,
   SquadNotExistsError,
   SquadWillBeFilledError
@@ -19,7 +20,7 @@ class SquadRepository extends BaseRepository<ISquad> {
     super('Squad', SquadSchema);
   }
 
-  async getOne(id: string) {
+  async getOne(id: string): Promise<ISquad> {
     const squad = await this.byID(id, {
       populations: [
         { path: 'player', select: 'player_name' },
@@ -42,10 +43,12 @@ class SquadRepository extends BaseRepository<ISquad> {
 
     rest['artistes'] = moddedArtistes;
 
-    return rest;
+    return rest as ISquad;
   }
 
   async addArtistes(id: string, artistes: string[]) {
+    if (artistes.length != 8) throw new ArtistesNotEnoughError();
+
     const [squad, artistesArray] = await Promise.all([
       this.byID(id),
       ArtisteRepo.get({ query: { _id: { $in: artistes } } })
@@ -109,6 +112,25 @@ class SquadRepository extends BaseRepository<ISquad> {
       session.commitTransaction();
     });
     session.endSession();
+
+    // put the last three artistes on the bench
+    const ids = artistes.filter((_, i) => i > 4);
+
+    const session2 = await startSession();
+    await session2.withTransaction(async () => {
+      for (const aid of ids) {
+        await this.model
+          .updateOne(
+            { _id: id, 'roster.artiste': aid },
+            { $set: { 'roster.$.location': 'bench' } },
+            { session: session2 }
+          )
+          .exec();
+      }
+
+      session2.commitTransaction();
+    });
+    session2.endSession();
 
     return this.getOne(id);
   }
