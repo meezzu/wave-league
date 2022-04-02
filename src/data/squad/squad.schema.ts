@@ -10,7 +10,7 @@ import { ISquad } from './squad.model';
 const SquadSchema = SchemaFactory<ISquad>({
   squad_name: { ...trimmedRequiredString },
   squad_value: { ...requiredNumber, default: 0 },
-  in_the_bank: { ...requiredNumber, default: 0 },
+  in_the_bank: { ...requiredNumber, default: 100 },
   artistes: [
     {
       ...trimmedRequiredString,

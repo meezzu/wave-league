@@ -212,6 +212,11 @@ class SquadRepository extends BaseRepository<ISquad> {
       throw new ArtisteAlreadyInSquadError(artisteIn);
     }
 
+    // get the location of the artiste being removed
+    const location = squad.roster.find(
+      it => it.artiste === artisteOut
+    ).location;
+
     const session = await startSession();
     await session.withTransaction(async () => {
       await Promise.all([
@@ -222,7 +227,8 @@ class SquadRepository extends BaseRepository<ISquad> {
               $addToSet: {
                 artistes: artisteIn,
                 roster: {
-                  artiste: artisteIn
+                  artiste: artisteIn,
+                  location
                 }
               }
             },
