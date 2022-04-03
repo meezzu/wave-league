@@ -61,19 +61,6 @@ export class SquadController extends BaseController {
     }
   };
 
-  removeArtistes = async (req: Request, res: Response) => {
-    try {
-      const squad = await SquadRepo.removeArtistes(
-        req.params.id,
-        req.body.artistes
-      );
-
-      this.handleSuccess(req, res, squad);
-    } catch (error) {
-      this.handleError(req, res, error);
-    }
-  };
-
   addArtistes = async (req: Request, res: Response) => {
     try {
       const squad = await SquadRepo.addArtistes(
