@@ -37,7 +37,7 @@ export default class App {
 
     this.server.use(jsend);
   }
-
+  
   /**
    * Registers utility handlers
    */
