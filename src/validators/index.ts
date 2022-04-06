@@ -55,6 +55,7 @@ export const paginate = joi.object({
   sort: optionalString.allow('', null),
   max_price: optionalNumber,
   min_price: optionalNumber,
+  week:optionalNumber,
   page: optionalNumber.default(1),
   per_page: optionalNumber.default(20)
 });
