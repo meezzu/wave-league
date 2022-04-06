@@ -16,7 +16,7 @@ export class ChartsController extends BaseController {
           sort: req.query.sort|| 'created_at',
           page: Number(req.query.page),
           per_page: Number(req.query.per_page),
-          populations: {path: "artiste", select:"artiste_name , avatar , record_label"}
+          populations: {path: "artiste", select:"artiste_name avatar record_label"}
       })
       
       this.handleSuccess(req, res, artistes);
