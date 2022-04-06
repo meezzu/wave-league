@@ -41,9 +41,11 @@ export class ArtisteController extends BaseController {
       ]);
 
       const artistePoints = await PointRepo.get({
+         
         query: {
           artiste: { $in: artistes.result.map(it => it._id) },
           week_number: thisWeek[0].week_number
+         
         }
       });
 
