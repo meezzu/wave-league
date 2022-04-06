@@ -1,21 +1,19 @@
-import { xor } from 'lodash';
+import { ArtisteRepo } from '../../data/artiste';
+import { TransferRepo } from '../../data/transfer';
 import { startSession } from 'mongoose';
 import {
   ArtisteAlreadyInSquadError,
   ArtisteNotExistsError,
   ArtisteNotInSquadError,
   ArtistesNotEnoughError,
-  InsufficientFundsError,
-  InsufficientFundsForTransferError,
   SquadFilledError,
   SquadNotExistsError,
   SquadWillBeFilledError
 } from '../../common/errors';
-import { ArtisteRepo } from '../../data/artiste';
-import { TransferRepo } from '../../data/transfer';
 import { BaseRepository } from '../base';
 import { ISquad } from './squad.model';
 import SquadSchema from './squad.schema';
+import { xor } from 'lodash';
 
 class SquadRepository extends BaseRepository<ISquad> {
   constructor() {
@@ -79,15 +77,6 @@ class SquadRepository extends BaseRepository<ISquad> {
       }
     }
 
-    // check if the artistes we are adding will not exceed the squad bank
-    const cost = artistesArray.reduce((acc, cur) => acc + cur.price, 0);
-    const amountLeftInBank = squad.in_the_bank - cost;
-
-    // if the cost of the artistes exceeds how much we have
-    if (cost > squad.in_the_bank) {
-      throw new InsufficientFundsError();
-    }
-
     const session = await startSession();
     await session.withTransaction(async () => {
       for (const aid of artistes) {
@@ -95,10 +84,6 @@ class SquadRepository extends BaseRepository<ISquad> {
           .updateOne(
             { _id: id },
             {
-              $set: {
-                squad_value: cost,
-                in_the_bank: amountLeftInBank
-              },
               $addToSet: {
                 artistes: aid,
                 roster: {
@@ -232,12 +217,6 @@ class SquadRepository extends BaseRepository<ISquad> {
       it => it.artiste === artisteOut
     ).location;
 
-    const amountLeftInBank = squad.in_the_bank + artOut.price - artIn.price;
-    const squadValue = squad.squad_value - artOut.price + artIn.price;
-    if (amountLeftInBank < 0) {
-      throw new InsufficientFundsForTransferError();
-    }
-
     const session = await startSession();
     await session.withTransaction(async () => {
       await Promise.all([
@@ -245,10 +224,6 @@ class SquadRepository extends BaseRepository<ISquad> {
           .updateOne(
             { _id: id },
             {
-              $set: {
-                squad_value: squadValue,
-                in_the_bank: amountLeftInBank
-              },
               $addToSet: {
                 artistes: artisteIn,
                 roster: {

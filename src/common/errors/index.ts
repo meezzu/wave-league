@@ -225,23 +225,3 @@ export class ArtistesNotEnoughError extends ControllerError {
     this.error_code = 205;
   }
 }
-
-export class InsufficientFundsError extends ControllerError {
-  constructor() {
-    const errorMessage = `you don't have enough in the bank for these artistes`;
-    super(errorMessage);
-
-    this.code = BAD_REQUEST;
-    this.error_code = 401;
-  }
-}
-
-export class InsufficientFundsForTransferError extends ControllerError {
-  constructor() {
-    const errorMessage = `you don't have enough in the bank for the transfer`;
-    super(errorMessage);
-
-    this.code = BAD_REQUEST;
-    this.error_code = 402;
-  }
-}
