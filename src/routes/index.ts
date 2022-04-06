@@ -74,6 +74,12 @@ v1Router
     gateman.guard(),
     validator(replaceArtistes),
     squads.substitute
+  )
+  .post(
+    '/squads/:id/remove-artistes',
+    gateman.guard(),
+    validator(artistesOnly),
+    squads.removeArtistes
   );
 
 v1Router
