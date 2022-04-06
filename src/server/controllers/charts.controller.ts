@@ -8,16 +8,14 @@ export class ChartsController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
      
-      const [thisWeek] = await Promise.all([
-      await WeekRepo.getModel().find().sort({ created_at: -1 }).limit(1)
-      ])
+      const thisWeek = await WeekRepo.getModel().find().sort({ created_at: -1 }).limit(1)
+      
          
       const query = {
           week_number: thisWeek[0].week_number,
       };
 
-      const [artistes] = await Promise.all([
-        PointRepo.getPaged({
+      const artistes = await PointRepo.getPaged({
           query,
           sort: req.query.sort|| 'created_at',
           page: Number(req.query.page),
