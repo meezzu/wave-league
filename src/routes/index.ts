@@ -18,7 +18,8 @@ import {
   players,
   transfers,
   weeks,
-  points
+  points,
+  charts
 } from '../server/controllers';
 import gateman from '../server/gateman';
 
@@ -89,5 +90,8 @@ v1Router
   .get('/points', validator(paginate, 'query'), points.getMany)
   .get('/points/:id', points.getOne)
   .post('/points', validator(createPoint), points.create);
+
+v1Router
+  .get('/charts', validator(paginate, 'query'), charts.getMany)
 
 export default v1Router;
