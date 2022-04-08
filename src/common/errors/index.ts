@@ -245,3 +245,12 @@ export class InsufficientFundsForTransferError extends ControllerError {
     this.error_code = 402;
   }
 }
+export class LeagueExistsError extends ControllerError {
+  constructor() {
+    const errorMessage = 'League name already exist';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 305;
+  }
+}
