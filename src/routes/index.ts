@@ -19,7 +19,8 @@ import {
   transfers,
   weeks,
   points,
-  charts
+  charts,
+  league
 } from '../server/controllers';
 import gateman from '../server/gateman';
 
@@ -93,5 +94,8 @@ v1Router
 
 v1Router
   .get('/charts', validator(paginate, 'query'), charts.getMany)
+
+v1Router
+   .get('/leagues', validator(paginate, 'query'), league.getMany)  
 
 export default v1Router;
