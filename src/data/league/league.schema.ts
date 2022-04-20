@@ -12,6 +12,7 @@ const LeagueSchema = SchemaFactory<ILeague>({
     {
       ...trimmedRequiredString,
       ref: 'Squad'
+
     }
   ]
 });

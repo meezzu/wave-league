@@ -13,6 +13,7 @@ import {
   SquadNotInLeagueError
 } from '../../common/errors';
 
+
 class LeagueRepository extends BaseRepository<ILeague> {
   constructor() {
     super('League', LeagueSchema);
@@ -116,5 +117,6 @@ class LeagueRepository extends BaseRepository<ILeague> {
 
     return this.getOne(id);
   }
+}
 }
 export const LeagueRepo = new LeagueRepository();

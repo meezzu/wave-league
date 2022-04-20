@@ -106,4 +106,7 @@ v1Router
 v1Router
    .get('/leagues', validator(paginate, 'query'), league.getMany)  
 
+v1Router
+   .get('/leagues', validator(paginate, 'query'), league.getMany)  
+
 export default v1Router;
