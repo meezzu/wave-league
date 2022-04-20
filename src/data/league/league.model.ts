@@ -3,7 +3,7 @@ import { BaseModel } from '../../data/base';
 export interface ILeague extends BaseModel {
   league_name: string;
   league_type: 'public' | 'private';
-  player_limit?: number;
-  players: string[];
+  squad_limit?: number;
+  squads: string[];
   total_players: number;
 }
