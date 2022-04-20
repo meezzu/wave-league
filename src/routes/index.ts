@@ -2,10 +2,12 @@ import { Router } from 'express';
 import validator from '../server/middleware/validator';
 import {
   artistesOnly,
+  addPlayer,
   createArtiste,
   createPoint,
   createSquad,
   createWeek,
+  createLeague,
   login,
   paginate,
   replaceArtistes,
@@ -92,10 +94,13 @@ v1Router
   .get('/points/:id', points.getOne)
   .post('/points', validator(createPoint), points.create);
 
-v1Router
-  .get('/charts', validator(paginate, 'query'), charts.getMany)
+v1Router.get('/charts', validator(paginate, 'query'), charts.getMany);
 
 v1Router
-   .get('/leagues', validator(paginate, 'query'), league.getMany)  
+  .get('/leagues', validator(paginate, 'query'), league.getMany)
+  .get('/leagues/:id', league.getOne)
+  .post('/leagues', validator(createLeague), league.create)
+  .post('/leagues/:id/join', validator(addPlayer), league.addSquad)
+  .post('/leagues/:id/leave', validator(addPlayer), league.removeSquad);
 
 export default v1Router;
