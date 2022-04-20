@@ -7,14 +7,11 @@ const LeagueSchema = SchemaFactory<ILeague>({
     ...trimmedRequiredString,
     enum: ['public', 'private']
   },
-  player_limit: { ...requiredNumber, default: 20, max: 20 },
-  players: [
+  squad_limit: { ...requiredNumber, default: 10, max: 20 },
+  squads: [
     {
-      player: {
-        ...trimmedRequiredString,
-        ref: 'Player',
-        unique: true
-      }
+      ...trimmedRequiredString,
+      ref: 'Squad'
     }
   ]
 });

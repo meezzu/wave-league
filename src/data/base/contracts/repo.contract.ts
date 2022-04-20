@@ -30,13 +30,15 @@ export interface Query {
   sort?: string | object;
 }
 
+export interface SelectOptions {
+  projections?: any;
+  populations?: any;
+}
+
 export interface Repository<T> {
   create(attributes: T): Promise<T>;
-  byID(id: string, opts: { projections?: any; populations?: any }): Promise<T>;
-  byQuery(
-    query: any,
-    opts: { projections?: any; populations?: any }
-  ): Promise<T>;
+  byID(id: string, opts: SelectOptions): Promise<T>;
+  byQuery(query: any, opts: SelectOptions): Promise<T>;
   getPaged(query: PaginationQuery): Promise<QueryResult<T>>;
   get(query: Query): Promise<T[]>;
   update(condition: string | object, update: any): Promise<T>;
