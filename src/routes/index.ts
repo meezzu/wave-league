@@ -103,4 +103,7 @@ v1Router
   .post('/leagues/:id/join', validator(addPlayer), league.addSquad)
   .post('/leagues/:id/leave', validator(addPlayer), league.removeSquad);
 
+v1Router
+   .get('/leagues', validator(paginate, 'query'), league.getMany)  
+
 export default v1Router;
