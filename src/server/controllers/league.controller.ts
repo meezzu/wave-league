@@ -59,6 +59,16 @@ export class LeagueController extends BaseController {
       this.handleError(req, res, error);
     }
   };
+
+  getRanking = async (req: Request, res: Response) => {
+    try {
+      const ranking = await LeagueRepo.getRanking(req.params.id);
+
+      this.handleSuccess(req, res, ranking);
+    } catch (error) {
+      this.handleError(req, res, error);
+    }
+  };
 }
 
 export const leagues = new LeagueController();

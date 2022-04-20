@@ -44,7 +44,7 @@ class LeagueRepository extends BaseRepository<ILeague> {
     return rest as ILeague;
   }
 
-  async addSquad(id: string, squad_id: string) {
+  async addSquad(id: string, squad_id: string): Promise<ILeague> {
     const [league, squad] = await Promise.all([
       this.byID(id),
       SquadRepo.byID(squad_id)
@@ -77,7 +77,7 @@ class LeagueRepository extends BaseRepository<ILeague> {
     return this.getOne(id);
   }
 
-  async removeSquad(id: string, squad_id: string) {
+  async removeSquad(id: string, squad_id: string): Promise<ILeague> {
     const [league, squad] = await Promise.all([
       this.byID(id),
       SquadRepo.byID(squad_id)
@@ -106,6 +106,46 @@ class LeagueRepository extends BaseRepository<ILeague> {
       .exec();
 
     return this.getOne(id);
+  }
+
+  async getRanking(id: string) {
+    const league = await this.byID(id, {
+      populations: {
+        model: 'Squad',
+        path: 'squads',
+        select: 'squad_name player artistes',
+        populate: {
+          model: 'Player',
+          path: 'player',
+          select: 'player_name'
+        }
+      }
+    });
+
+    if (!league) throw new LeagueNotExistsError();
+
+    const thisWeek = await WeekRepo.getModel()
+      .find()
+      .sort({ created_at: -1 })
+      .limit(1);
+
+    const newSquads = [];
+    for (const squad of league.squads as any[]) {
+      console.log(squad);
+
+      const week_number = thisWeek[0].week_number;
+      const points = await PointRepo.getPoints(squad.artistes, week_number);
+
+      newSquads.push({
+        _id: squad.id,
+        points,
+        week: week_number,
+        squad_name: squad.squad_name,
+        player_name: squad.player.player_name
+      });
+    }
+
+    return newSquads;
   }
 }
 

@@ -98,6 +98,7 @@ v1Router
   .get('/leagues', validator(paginate, 'query'), leagues.getMany)
   .post('/leagues', leagues.create)
   .get('/leagues/:id', leagues.getOne)
+  .get('/leagues/:id/ranking', leagues.getRanking)
   .post('/leagues/:id/join', leagues.addSquad)
   .post('/leagues/:id/leave', leagues.removeSquad);
 
