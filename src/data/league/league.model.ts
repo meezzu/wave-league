@@ -4,7 +4,7 @@ export interface ILeague extends BaseModel {
   _id: string;
   league_name: string;
   league_type: 'public' | 'private';
-  player_limit?: number;
-  players: string[];
+  squad_limit?: number;
+  squads: string[];
   total_players: number;
 }
