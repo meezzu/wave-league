@@ -20,7 +20,7 @@ import {
   weeks,
   points,
   charts,
-  league
+  leagues
 } from '../server/controllers';
 import gateman from '../server/gateman';
 
@@ -92,10 +92,13 @@ v1Router
   .get('/points/:id', points.getOne)
   .post('/points', validator(createPoint), points.create);
 
-v1Router
-  .get('/charts', validator(paginate, 'query'), charts.getMany)
+v1Router.get('/charts', validator(paginate, 'query'), charts.getMany);
 
 v1Router
-   .get('/leagues', validator(paginate, 'query'), league.getMany)  
+  .get('/leagues', validator(paginate, 'query'), leagues.getMany)
+  .post('/leagues', leagues.create)
+  .get('/leagues/:id', leagues.getOne)
+  .post('/leagues/:id/join', leagues.addSquad)
+  .post('/leagues/:id/leave', leagues.removeSquad);
 
 export default v1Router;
