@@ -265,10 +265,10 @@ export class LeagueFilledError extends ControllerError {
     this.error_code = 303;
   }
 }
- 
+
 export class SquadAlreadyInLeagueError extends ControllerError {
-  constructor(id: string) {
-    const errorMessage = `squad with id: (${id}) is already in this league`;
+  constructor(name: string) {
+    const errorMessage = `${name} is already in this league`;
     super(errorMessage);
 
     this.code = BAD_REQUEST;
@@ -277,12 +277,11 @@ export class SquadAlreadyInLeagueError extends ControllerError {
 }
 
 export class SquadNotInLeagueError extends ControllerError {
-  constructor(id: string) {
-    const errorMessage = `squad with id: (${id}) is not in this league`;
+  constructor(name: string) {
+    const errorMessage = `${name} is not in this league`;
     super(errorMessage);
 
     this.code = BAD_REQUEST;
     this.error_code = 204;
   }
 }
-
