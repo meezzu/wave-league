@@ -2,6 +2,8 @@ import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { PointRepo } from '../../data/point';
 import { WeekRepo } from '../../data/week';
+import { merge } from 'lodash';
+
 export class ChartsController extends BaseController {
   getMany = async (req: Request, res: Response) => {
     try {
@@ -24,6 +26,14 @@ export class ChartsController extends BaseController {
           select: 'artiste_name avatar record_label'
         }
       });
+
+      const arts = [];
+      for (const result of charts.result) {
+        const { artiste, ...rest } = merge(result, result.artiste)['_doc'];
+        arts.push(rest);
+      }
+
+      charts.result = arts;
 
       this.handleSuccess(req, res, charts);
     } catch (error) {
