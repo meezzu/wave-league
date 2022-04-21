@@ -245,3 +245,53 @@ export class InsufficientFundsForTransferError extends ControllerError {
     this.error_code = 402;
   }
 }
+
+export class LeagueExistsError extends ControllerError {
+  constructor() {
+    const errorMessage = 'League name already exist ';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 305;
+  }
+}
+export class LeagueNotExistsError extends ControllerError {
+  constructor() {
+    const errorMessage = 'League does not exist';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 303;
+  }
+}
+
+export class LeagueFilledError extends ControllerError {
+  constructor() {
+    const errorMessage = 'the league is already complete';
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 303;
+  }
+}
+ 
+export class SquadAlreadyInLeagueError extends ControllerError {
+  constructor(id: string) {
+    const errorMessage = `squad with id: (${id}) is already in this league`;
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 204;
+  }
+}
+
+export class SquadNotInLeagueError extends ControllerError {
+  constructor(id: string) {
+    const errorMessage = `squad with id: (${id}) is not in this league`;
+    super(errorMessage);
+
+    this.code = BAD_REQUEST;
+    this.error_code = 204;
+  }
+}
+

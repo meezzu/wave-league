@@ -64,3 +64,12 @@ export const replaceArtistes = joi.object({
   in: requiredString,
   out: requiredString
 });
+
+export const createLeague = joi.object({
+  league_name: requiredString,
+  league_type: requiredString,
+});
+
+export const addSquad = joi.object({
+  squad: requiredString,
+})
