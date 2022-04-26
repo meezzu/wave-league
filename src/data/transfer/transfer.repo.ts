@@ -8,7 +8,7 @@ class TransferRepository extends BaseRepository<ITransfer> {
     super('Transfer', TransferSchema);
   }
 
-  async transferout(transfer_type: string = 'out') {
+  async transferOut(transfer_type: string = 'out') {
     const cursor = this.model.find({ transfer_type }).cursor();
     const transfers: ITransfer[] = [];
 ​

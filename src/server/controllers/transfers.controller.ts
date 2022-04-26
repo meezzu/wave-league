@@ -40,9 +40,9 @@ export class TransferController extends BaseController {
     }
   };
   
-  find = async (req: Request, res: Response) => {
+  transferredOut = async (req: Request, res: Response) => {
     try {
-      const transfer = await TransferRepo.transferout();
+      const transfer = await TransferRepo.transferOut();
       this.handleSuccess(req, res, transfer);
     } catch (error) {
       this.handleError(req, res, error);

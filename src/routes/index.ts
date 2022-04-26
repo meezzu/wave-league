@@ -79,7 +79,7 @@ v1Router
 
 v1Router
   .get('/transfers', validator(paginate, 'query'), transfers.getMany)
-  .get('/transfers/find', transfers.find)
+  .get('/transfers/out', transfers.transferredOut)
   .get('/transfers/:id', transfers.getOne)
   .post('/transfers', transfers.create);
   
