@@ -55,7 +55,7 @@ export const paginate = joi.object({
   sort: optionalString.allow('', null),
   max_price: optionalNumber,
   min_price: optionalNumber,
-  week:optionalNumber,
+  week: optionalNumber,
   page: optionalNumber.default(1),
   per_page: optionalNumber.default(20)
 });
@@ -63,4 +63,14 @@ export const paginate = joi.object({
 export const replaceArtistes = joi.object({
   in: requiredString,
   out: requiredString
+});
+
+export const rankings = joi.object({
+  week: requiredNumber
+});
+
+export const createLeague = joi.object({
+  league_name: requiredString,
+  squad_limit: requiredNumber,
+  league_type: requiredString.allow('public', 'private')
 });

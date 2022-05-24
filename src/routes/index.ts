@@ -3,11 +3,13 @@ import validator from '../server/middleware/validator';
 import {
   artistesOnly,
   createArtiste,
+  createLeague,
   createPoint,
   createSquad,
   createWeek,
   login,
   paginate,
+  rankings,
   replaceArtistes,
   signup,
   updateSquad
@@ -96,11 +98,13 @@ v1Router
 
 v1Router.get('/charts', validator(paginate, 'query'), charts.getMany);
 
+v1Router.get('/rankings', validator(paginate, 'query'), charts.getMany);
+
 v1Router
   .get('/leagues', validator(paginate, 'query'), leagues.getMany)
-  .post('/leagues', leagues.create)
+  .post('/leagues', validator(createLeague), leagues.create)
   .get('/leagues/:id', leagues.getOne)
-  .get('/leagues/:id/ranking', leagues.getRanking)
+  .get('/leagues/:id/ranking', validator(rankings, 'query'), leagues.getRanking)
   .post('/leagues/:id/join', leagues.addSquad)
   .post('/leagues/:id/leave', leagues.removeSquad);
 

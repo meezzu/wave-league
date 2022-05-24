@@ -62,7 +62,10 @@ export class LeagueController extends BaseController {
 
   getRanking = async (req: Request, res: Response) => {
     try {
-      const ranking = await LeagueRepo.getRanking(req.params.id);
+      const ranking = await LeagueRepo.getRanking(
+        req.params.id,
+        Number(req.query.week)
+      );
 
       this.handleSuccess(req, res, ranking);
     } catch (error) {

@@ -108,7 +108,7 @@ class LeagueRepository extends BaseRepository<ILeague> {
     return this.getOne(id);
   }
 
-  async getRanking(id: string) {
+  async getRanking(id: string, week: number) {
     const league = await this.byID(id, {
       populations: {
         model: 'Squad',
@@ -124,28 +124,25 @@ class LeagueRepository extends BaseRepository<ILeague> {
 
     if (!league) throw new LeagueNotExistsError();
 
-    const thisWeek = await WeekRepo.getModel()
-      .find()
-      .sort({ created_at: -1 })
-      .limit(1);
-
     const newSquads = [];
-    for (const squad of league.squads as any[]) {
-      console.log(squad);
+    const squads = league.squads as any[];
 
-      const week_number = thisWeek[0].week_number;
-      const points = await PointRepo.getPoints(squad.artistes, week_number);
+    for (let index = 0; index < squads.length; index++) {
+      const squad = squads[index];
+
+      const points = await PointRepo.getPoints(squad.artistes, week);
+      if (!points) continue;
 
       newSquads.push({
         _id: squad.id,
+        week,
         points,
-        week: week_number,
         squad_name: squad.squad_name,
         player_name: squad.player.player_name
       });
     }
 
-    return newSquads;
+    return newSquads.sort((a, b) => b.points - a.points);
   }
 }
 
