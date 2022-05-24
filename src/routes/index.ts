@@ -79,10 +79,10 @@ v1Router
 
 v1Router
   .get('/transfers', validator(paginate, 'query'), transfers.getMany)
-  .get('/transfers/out', transfers.transferredOut)
+  .get('/transfers/top/out', transfers.getTopTransfersOut)
+  .get('/transfers/top/in', transfers.getTopTransfersIn)
   .get('/transfers/:id', transfers.getOne)
   .post('/transfers', transfers.create);
-  
 
 v1Router
   .get('/weeks', validator(paginate, 'query'), weeks.getMany)

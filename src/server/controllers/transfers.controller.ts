@@ -19,7 +19,6 @@ export class TransferController extends BaseController {
     }
   };
 
-
   getOne = async (req: Request, res: Response) => {
     try {
       const transfer = await TransferRepo.byID(req.params.id);
@@ -39,16 +38,24 @@ export class TransferController extends BaseController {
       this.handleError(req, res, error);
     }
   };
-  
-  transferredOut = async (req: Request, res: Response) => {
+
+  getTopTransfersOut = async (req: Request, res: Response) => {
     try {
-      const transfer = await TransferRepo.transferOut();
+      const transfer = await TransferRepo.transfers('out');
       this.handleSuccess(req, res, transfer);
     } catch (error) {
       this.handleError(req, res, error);
     }
   };
 
+  getTopTransfersIn = async (req: Request, res: Response) => {
+    try {
+      const transfer = await TransferRepo.transfers('in');
+      this.handleSuccess(req, res, transfer);
+    } catch (error) {
+      this.handleError(req, res, error);
+    }
+  };
 }
 
 export const transfers = new TransferController();
