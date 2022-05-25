@@ -64,9 +64,35 @@ export class ArtisteController extends BaseController {
 
   getOne = async (req: Request, res: Response) => {
     try {
-      const artiste = await ArtisteRepo.byID(req.params.id);
+      let [artiste, points] = await Promise.all([
+        ArtisteRepo.byID(req.params.id, {
+          projections: 'price avatar record_label artiste_name'
+        }),
+        PointRepo.get({
+          query: { artiste: req.params.id },
+          projections: 'points week_number',
+          sort: '-week_number'
+        })
+      ]);
 
-      this.handleSuccess(req, res, artiste);
+      const total_points = points
+        .map(f => f.points)
+        .reduce((acc: any, cur) => (acc += cur), 0);
+
+      const history = points.map(f => ({
+        ...f.toJSON(),
+        form: 1.0,
+        price: artiste.price
+      })) as any[];
+
+      const form = 1;
+
+      this.handleSuccess(req, res, {
+        ...artiste.toJSON(),
+        total_points,
+        form,
+        history
+      });
     } catch (error) {
       this.handleError(req, res, error);
     }

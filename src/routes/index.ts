@@ -98,8 +98,6 @@ v1Router
 
 v1Router.get('/charts', validator(paginate, 'query'), charts.getMany);
 
-v1Router.get('/rankings', validator(paginate, 'query'), charts.getMany);
-
 v1Router
   .get('/leagues', validator(paginate, 'query'), leagues.getMany)
   .post('/leagues', validator(createLeague), leagues.create)
