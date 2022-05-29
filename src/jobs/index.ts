@@ -8,7 +8,7 @@ import {
 } from '../common/constants';
 import { ArtisteRepo } from '../data/artiste';
 import { WeekRepo } from '../data/week';
-import { SquadRepo } from 'data/squad';
+import { SquadRepo } from '../data/squad';
 
 export const REMINDER_JOB = 'DAILY_REMINDER_JOB';
 
