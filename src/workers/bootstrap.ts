@@ -2,11 +2,15 @@ import express, { Request, Response } from 'express';
 import http from 'http';
 import env from '../common/config/env';
 import logger from '../common/services/logger';
-import { QUEUE_POINTS_ASSIGN, QUEUE_WEEKS_CREATE } from '../common/constants';
+import {
+  JOB_AGGREGATE_PLAYER_STATS,
+  JOB_POINTS_ASSIGN,
+  JOB_WEEKS_CREATE
+} from '../common/constants';
 import { subscriber } from '@random-guys/eventbus';
 import redis from '../common/services/redis';
 import db from '../server/db';
-import { assignPointsToArtist, createWeek } from './handlers';
+import { aggregateStats, assignPointsToArtist, createWeek } from './handlers';
 
 let httpServer: http.Server;
 const app = express();
@@ -34,8 +38,9 @@ export const startWorker = async () => {
     });
 
     // Attach handlers
-    await subscriber.consume(QUEUE_WEEKS_CREATE, createWeek);
-    await subscriber.consume(QUEUE_POINTS_ASSIGN, assignPointsToArtist, 10);
+    await subscriber.consume(JOB_WEEKS_CREATE, createWeek);
+    await subscriber.consume(JOB_POINTS_ASSIGN, assignPointsToArtist, 10);
+    await subscriber.consume(JOB_AGGREGATE_PLAYER_STATS, aggregateStats, 10);
 
     // Start simple server for k8s health check
     app.get('/', (req: Request, res: Response) => {

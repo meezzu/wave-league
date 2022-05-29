@@ -108,7 +108,7 @@ class LeagueRepository extends BaseRepository<ILeague> {
     return this.getOne(id);
   }
 
-  async getRanking(id: string, week: number) {
+  async getRanking(id: string = 'general', week: number = 1) {
     const league = await this.byID(id, {
       populations: {
         model: 'Squad',
