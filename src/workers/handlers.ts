@@ -9,7 +9,6 @@ import { Day } from '../common/constants';
 import { WeekNotFoundError } from '../common/errors';
 import { TransferRepo } from '../data/transfer';
 import { LeagueRepo } from '../data/league';
-import { PlayerRepo } from '../data/player';
 import { SquadRepo } from '../data/squad';
 
 export async function createWeek(message: ConsumeMessage) {
@@ -44,11 +43,10 @@ export async function aggregateStats(message: ConsumeMessage) {
   };
 
   try {
-    const [transfers, points, ranking, squad] = await Promise.all([
+    const [transfers, points, ranking] = await Promise.all([
       TransferRepo.get({ query: { squad: squad_id } }),
       PointRepo.get({ query: { squad: squad_id } }),
-      LeagueRepo.getRanking(),
-      SquadRepo.byID(squad_id)
+      LeagueRepo.getRanking()
     ]);
 
     const totalPoints = points
@@ -63,10 +61,7 @@ export async function aggregateStats(message: ConsumeMessage) {
       total_points: totalPoints
     };
 
-    await PlayerRepo.getModel().updateOne(
-      { _id: squad.player },
-      { $set: results }
-    );
+    await SquadRepo.getModel().updateOne({ _id: squad_id }, { $set: results });
 
     subscriber.acknowledgeMessage(message);
     logger.message(`stats aggregated for ${squad_id}`);

@@ -5,9 +5,6 @@ export interface IPlayer {
   email: string;
   country: string;
 
-  transfer_count: number;
-  squad_ranking: number;
-  total_points: number;
 }
 
 export type CreatePlayerDTO = IPlayer;

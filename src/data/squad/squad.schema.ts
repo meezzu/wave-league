@@ -31,7 +31,11 @@ const SquadSchema = SchemaFactory<ISquad>({
     ...trimmedRequiredString,
     ref: 'Player',
     unique: true
-  }
+  },
+
+  transfer_count: { ...requiredNumber, default: 0 },
+  squad_ranking: { ...requiredNumber, default: 0 },
+  total_points: { ...requiredNumber, default: 0 }
 });
 
 export default SquadSchema;
