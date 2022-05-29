@@ -8,9 +8,9 @@ import { PointRepo } from '../data/point';
 import { Day } from '../common/constants';
 import { WeekNotFoundError } from '../common/errors';
 import { TransferRepo } from '../data/transfer';
-import { LeagueRepo } from 'data/league';
-import { PlayerRepo } from 'data/player';
-import { SquadRepo } from 'data/squad';
+import { LeagueRepo } from '../data/league';
+import { PlayerRepo } from '../data/player';
+import { SquadRepo } from '../data/squad';
 
 export async function createWeek(message: ConsumeMessage) {
   checkConsumerCancelNotification(message);
