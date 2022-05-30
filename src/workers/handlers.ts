@@ -1,15 +1,16 @@
 import { subscriber } from '@random-guys/eventbus';
 import { ConsumeMessage } from 'amqplib';
-import { checkConsumerCancelNotification } from './utils';
-import logger from '../common/services/logger';
-import { WeekRepo } from '../data/week';
 import faker from 'faker';
-import { PointRepo } from '../data/point';
 import { Day } from '../common/constants';
 import { WeekNotFoundError } from '../common/errors';
-import { TransferRepo } from '../data/transfer';
+import logger from '../common/services/logger';
 import { LeagueRepo } from '../data/league';
+import { PlayerRepo } from '../data/player';
+import { PointRepo } from '../data/point';
 import { SquadRepo } from '../data/squad';
+import { TransferRepo } from '../data/transfer';
+import { WeekRepo } from '../data/week';
+import { checkConsumerCancelNotification } from './utils';
 
 export async function createWeek(message: ConsumeMessage) {
   checkConsumerCancelNotification(message);
@@ -46,14 +47,15 @@ export async function aggregateStats(message: ConsumeMessage) {
     const [transfers, points, ranking] = await Promise.all([
       TransferRepo.get({ query: { squad: squad_id } }),
       PointRepo.get({ query: { squad: squad_id } }),
-      LeagueRepo.getRanking()
+      LeagueRepo.getRanking(),
+      PlayerRepo.getModel().find().limit(1)
     ]);
 
     const totalPoints = points
       .map(it => it.points)
       .reduce((acc, cur) => (acc += cur), 0);
 
-    const squadRanking = ranking.findIndex(it => it.squad_id === squad_id);
+    const squadRanking = ranking.findIndex(it => it._id === squad_id);
 
     const results = {
       transfer_count: transfers.length,
@@ -61,7 +63,9 @@ export async function aggregateStats(message: ConsumeMessage) {
       total_points: totalPoints
     };
 
-    await SquadRepo.getModel().updateOne({ _id: squad_id }, { $set: results });
+    await SquadRepo.getModel()
+      .updateOne({ _id: squad_id }, { $set: results })
+      .exec();
 
     subscriber.acknowledgeMessage(message);
     logger.message(`stats aggregated for ${squad_id}`);
