@@ -1,12 +1,7 @@
 import { publisher } from '@random-guys/eventbus';
 import http from 'http';
 import env from '../common/config/env';
-import {
-  CRON_DAILY_MIDNIGHT_UTC,
-  JOB_AGGREGATE_PLAYER_STATS,
-  JOB_POINTS_ASSIGN,
-  JOB_WEEKS_CREATE
-} from '../common/constants';
+import { CRON_DAILY_MIDNIGHT_UTC, JOB_WEEKS_CREATE } from '../common/constants';
 import logger from '../common/services/logger';
 import { jobRunner } from '../jobs';
 import App from './app';
@@ -26,8 +21,6 @@ const start = async () => {
 
     // set cron interval
     await jobRunner.every(CRON_DAILY_MIDNIGHT_UTC, JOB_WEEKS_CREATE);
-    await jobRunner.every(CRON_DAILY_MIDNIGHT_UTC, JOB_POINTS_ASSIGN);
-    await jobRunner.every(CRON_DAILY_MIDNIGHT_UTC, JOB_AGGREGATE_PLAYER_STATS);
 
     db.connection.once('close', async () => {
       await jobRunner.stop();

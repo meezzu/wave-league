@@ -69,6 +69,7 @@ export class BaseRepository<T> implements Repository<T> {
     const sort = q.sort || 'created_at';
     return this.model
       .find({ ...q.query, deleted_at: undefined })
+      .session(q.session)
       .select(q.projections)
       .populate(q.populations)
       .sort(sort)

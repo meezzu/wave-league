@@ -15,9 +15,7 @@ class PointRepository extends BaseRepository<IPoint> {
       }
     });
 
-    return points.reduce(function (acc, cur) {
-      return acc + cur?.points;
-    }, 0);
+    return points.map(it => it.points).reduce((acc, cur) => acc + cur, 0);
   }
 }
 

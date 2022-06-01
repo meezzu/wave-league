@@ -1,6 +1,4 @@
-export const JOB_WEEKS_CREATE = 'job.weeks.create';
-export const JOB_POINTS_ASSIGN = 'job.points.assign';
-export const JOB_AGGREGATE_PLAYER_STATS = 'job.aggregate.player.stats';
+export const JOB_WEEKS_CREATE = 'job.aggregate.weekly.stats';
 
 // The smallest unit of time in NodeJs is 1ms
 export const Millisecond = 1;

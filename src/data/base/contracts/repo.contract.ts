@@ -1,3 +1,5 @@
+import { ClientSession } from 'mongoose';
+
 export interface QueryResult<T> {
   page: number;
   per_page: number;
@@ -27,6 +29,7 @@ export interface Query {
   query: any;
   projections?: any;
   populations?: any;
+  session?: ClientSession;
   sort?: string | object;
 }
 
