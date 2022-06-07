@@ -32,7 +32,7 @@ export async function createWeek(message: ConsumeMessage) {
     const session = await startSession();
     await session.withTransaction(async () => {
       // 1. Create a new week
-      const [week] = await WeekRepo.getModel().create(
+      const [week] = await WeekRepo.createMany(
         [
           {
             week_number,
@@ -40,7 +40,7 @@ export async function createWeek(message: ConsumeMessage) {
             end_date: new Date(Date.now() + Day)
           }
         ],
-        { session }
+        session
       );
       logger.message(`week ${week_number} created`);
 
@@ -56,7 +56,7 @@ export async function createWeek(message: ConsumeMessage) {
         })
       );
 
-      await PointRepo.getModel().create(points, { session });
+      await PointRepo.createMany(points, session);
       logger.message(`week ${week_number} points for artistes created`);
 
       // 3. For every existing squad with a complete roster, calculate the points of the existing roster
@@ -83,7 +83,7 @@ export async function createWeek(message: ConsumeMessage) {
         });
       });
 
-      await ScoreRepo.getModel().create(scores, { session });
+      await ScoreRepo.createMany(scores, session);
       logger.message(`week ${week_number} scores for squads created`);
 
       // 4. For every existing squad compute weekly stats and save it to the squad

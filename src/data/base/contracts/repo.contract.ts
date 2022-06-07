@@ -40,6 +40,7 @@ export interface SelectOptions {
 
 export interface Repository<T> {
   create(attributes: T): Promise<T>;
+  createMany(attributes: T[], session: ClientSession): Promise<T[]>;
   byID(id: string, opts: SelectOptions): Promise<T>;
   byQuery(query: any, opts: SelectOptions): Promise<T>;
   getPaged(query: PaginationQuery): Promise<QueryResult<T>>;

@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema, FilterQuery } from 'mongoose';
+import mongoose, { Model, Schema, FilterQuery, ClientSession } from 'mongoose';
 import { Repository, Query, QueryResult, PaginationQuery } from '.';
 
 export class BaseRepository<T> implements Repository<T> {
@@ -26,6 +26,10 @@ export class BaseRepository<T> implements Repository<T> {
    */
   create(attributes: T): Promise<T> {
     return this.model.create(attributes);
+  }
+
+  createMany(attributes: T[], session: ClientSession = null): Promise<T[]> {
+    return this.model.create(attributes, { session });
   }
 
   /**

@@ -6,6 +6,7 @@ import {
   DuplicateModelError,
   PlayerSquadExistsError
 } from '../../common/errors';
+import { LeagueRepo } from 'data/league';
 
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -37,6 +38,7 @@ export class SquadController extends BaseController {
       if (exists) throw new PlayerSquadExistsError();
 
       const squad = await SquadRepo.create(req.body);
+      await LeagueRepo.addSquad('general', squad._id);
 
       this.handleSuccess(req, res, squad);
     } catch (error) {
