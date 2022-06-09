@@ -6,7 +6,7 @@ import {
   DuplicateModelError,
   PlayerSquadExistsError
 } from '../../common/errors';
-import { LeagueRepo } from 'data/league';
+import { LeagueRepo } from '../../data/league';
 
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
