@@ -1,6 +1,8 @@
 import { BaseController } from './base.controller';
 import { Request, Response } from 'express';
 import { LeagueRepo } from '../../data/league';
+import { DuplicateModelError } from '../../common/errors';
+import logger from '../../common/services/logger';
 
 export class LeagueController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -31,6 +33,11 @@ export class LeagueController extends BaseController {
       const league = await LeagueRepo.create(req.body);
       this.handleSuccess(req, res, league);
     } catch (error) {
+      if (error.code === 11000) {
+        logger.error(error);
+        return this.handleError(req, res, new DuplicateModelError('league'));
+      }
+
       this.handleError(req, res, error);
     }
   };

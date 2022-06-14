@@ -23,6 +23,16 @@ export class WeekController extends BaseController {
     }
   };
 
+  getCurrentWeek = async (req: Request, res: Response) => {
+    try {
+      const week = await WeekRepo.getCurrentWeek();
+
+      this.handleSuccess(req, res, week);
+    } catch (error) {
+      this.handleError(req, res, error);
+    }
+  };
+
   create = async (req: Request, res: Response) => {
     try {
       const week = await WeekRepo.create(req.body);

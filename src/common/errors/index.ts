@@ -119,8 +119,8 @@ class RepositoryError extends ControllerError {
 }
 
 export class DuplicateModelError extends RepositoryError {
-  constructor(message: string) {
-    super(message);
+  constructor(collection: string) {
+    super(`an existing ${collection} already exists`);
 
     this.code = BAD_REQUEST;
     this.error_code = 11000;

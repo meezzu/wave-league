@@ -7,6 +7,7 @@ import {
   PlayerSquadExistsError
 } from '../../common/errors';
 import { LeagueRepo } from '../../data/league';
+import logger from '../../common/services/logger';
 
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -43,8 +44,8 @@ export class SquadController extends BaseController {
       this.handleSuccess(req, res, squad);
     } catch (error) {
       if (error.code === 11000) {
-        const err = new DuplicateModelError(error.message);
-        return this.handleError(req, res, err);
+        logger.error(error);
+        return this.handleError(req, res, new DuplicateModelError("squad"));
       }
 
       this.handleError(req, res, error);

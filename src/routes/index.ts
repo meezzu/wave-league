@@ -12,6 +12,7 @@ import {
   rankings,
   replaceArtistes,
   signup,
+  updatePlayer,
   updateSquad
 } from '../validators';
 import {
@@ -31,7 +32,7 @@ const v1Router = Router();
 v1Router
   .get('/players', validator(paginate, 'query'), players.getMany)
   .get('/players/:id', gateman.guard(['user', 'admin']), players.getOne)
-  .put('/players/:id', players.update)
+  .put('/players/:id', validator(updatePlayer), players.update)
   .post('/players/login', validator(login), players.login)
   .get('/players/:id/squad', gateman.guard('user'), players.getSquad)
   .post('/players/signup', validator(signup), players.signup)
@@ -88,6 +89,7 @@ v1Router
 
 v1Router
   .get('/weeks', validator(paginate, 'query'), weeks.getMany)
+  .get('/weeks/current', weeks.getCurrentWeek)
   .get('/weeks/:id', weeks.getOne)
   .post('/weeks', validator(createWeek), weeks.create);
 
