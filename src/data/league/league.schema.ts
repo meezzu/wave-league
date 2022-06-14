@@ -1,7 +1,13 @@
-import { requiredNumber, SchemaFactory, trimmedRequiredString } from '../base';
+import {
+  requiredNumber,
+  SchemaFactory,
+  trimmedRequiredString,
+  uuid
+} from '../base';
 import { ILeague } from './league.model';
 
 const LeagueSchema = SchemaFactory<ILeague>({
+  _id: { ...uuid, required: true, default: 'general' },
   league_name: { ...trimmedRequiredString },
   league_type: {
     ...trimmedRequiredString,

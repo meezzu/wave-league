@@ -12,6 +12,10 @@ export const signup = joi.object({
   player_name: requiredString
 });
 
+export const updatePlayer = joi.object({
+  player_name: requiredString
+});
+
 export const login = joi.object({
   email: requiredEmail
 });

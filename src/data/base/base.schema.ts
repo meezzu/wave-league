@@ -12,9 +12,9 @@ export const SchemaFactory = <T>(
 
   return new Schema<T>(
     {
-      ...schemaFields,
       _id: { ...uuid, required: true },
-      deleted_at: { type: SchemaTypes.Date }
+      deleted_at: { type: SchemaTypes.Date },
+      ...schemaFields
     },
     {
       ...options,
