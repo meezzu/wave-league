@@ -79,7 +79,7 @@ export class ArtisteController extends BaseController {
         .map(f => f.points)
         .reduce((acc: any, cur) => (acc += cur), 0);
 
-      const history = points.map(f => ({
+      const history = points.slice(0, 5).map(f => ({
         ...f.toJSON(),
         form: 1.0,
         price: artiste.price
