@@ -66,7 +66,7 @@ export const replaceArtistes = joi.object({
 });
 
 export const rankings = joi.object({
-  week: requiredNumber
+  week: optionalNumber
 });
 
 export const createLeague = joi.object({
