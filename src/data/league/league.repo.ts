@@ -68,7 +68,7 @@ class LeagueRepository extends BaseRepository<ILeague> {
         },
         {
           $addToSet: {
-            squads: squad
+            squads: squad_id
           }
         }
       )
@@ -132,7 +132,14 @@ class LeagueRepository extends BaseRepository<ILeague> {
    
     for (let index = 0; index < squads.length; index++) {
       const squad = squads[index];
-      const points = (week ? await PointRepo.getPoints(squad.artistes, week): totalPoint[index].total_points);
+
+      let points
+      if (week) {
+        points = await PointRepo.getPoints(squad.artistes, week)
+      } else {
+        points = totalPoint[index].total_points
+      }
+     
       if (!points) continue;
       
       newSquads.push({
