@@ -22,7 +22,8 @@ import {
   weeks,
   points,
   charts,
-  leagues
+  leagues,
+  feedbacks
 } from '../server/controllers';
 import gateman from '../server/gateman';
 
@@ -106,4 +107,8 @@ v1Router
   .post('/leagues/:id/join', leagues.addSquad)
   .post('/leagues/:id/leave', leagues.removeSquad);
 
+v1Router
+    .get('/feedback', feedbacks.getAllFeedbacks)
+    .get('/feedback/:id', feedbacks.getFeedback)
+    .post('/feedback', feedbacks.createFeedback)
 export default v1Router;
