@@ -6,3 +6,4 @@ export * from './transfers.controller';
 export * from './points.controller';
 export * from './charts.controller';
 export * from './league.controller';
+export * from './feedback.controller'
