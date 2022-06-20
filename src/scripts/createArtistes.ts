@@ -2,7 +2,35 @@ import { ArtisteRepo, IArtiste } from '../data/artiste';
 import faker from 'faker';
 import db from '../server/db';
 import Omi, { OmiEvent } from '@random-guys/omi';
-import { seedArtistes } from './artistes';
+
+const seedArtistes = [
+  'Adel Cowan',
+  'Alan Londor',
+  'Alfred Iosefka',
+  'Ali Mossi',
+  'Amory Kun',
+  'Arny Bubo',
+  'Bella Maria',
+  'Dante Matti',
+  'Delano Kludge',
+  'Djura Zorah',
+  'Duke Vibrarion',
+  'Eileen Lidia',
+  'Eimile Arianna',
+  'Eva Gaits',
+  'Evelina Annalise',
+  'Gehrman Moon',
+  'Gilbert Linus',
+  'Grant Pi',
+  'Guts Saki',
+  'Henryk Dom',
+  'Kazan Nulet',
+  'Lawrence Fey',
+  'Lilah Abdel',
+  'Ludwig Logarious',
+  'Sara Tray',
+  'Yuria Brador'
+];
 
 db.connect();
 

@@ -48,8 +48,8 @@ const env = {
 
   redis_password: process.env.REDIS_PASSWORD,
 
-  android_build_number: process.env.ANDROID_BUILD_NUMBER,
-  ios_build_number: process.env.IOS_BUILD_NUMBER
+  boomplay_url: process.env.BOOMPLAY_URL,
+  kworb_url: process.env.KWORB_URL
 };
 
 const missingVariables = requiredVariables.reduce(
