@@ -1,3 +1,4 @@
+import { ClientSession } from 'mongoose';
 import {
   LeagueNotExistsError,
   SquadNotExistsError,
@@ -144,6 +145,72 @@ class LeagueRepository extends BaseRepository<ILeague> {
         squad.artistes,
         thisWeek.week_number
       );
+
+      newSquads.push({
+        _id: squad.id,
+        week: thisWeek.week_number,
+        points,
+        total_points: squad.total_points,
+        squad_name: squad.squad_name,
+        player_name: squad.player.player_name
+      });
+    }
+
+    if (isNaN(week_number)) {
+      return newSquads.sort((a, b) => b.total_points - a.total_points);
+    } else {
+      return newSquads.sort((a, b) => b.points - a.points);
+    }
+  }
+
+  async getWeeklyRanking(
+    id: string,
+    week_number: number,
+    session: ClientSession
+  ) {
+    let thisWeek: IWeek;
+    if (isNaN(week_number)) {
+      [thisWeek] = await WeekRepo.getModel()
+        .find({})
+        .session(session)
+        .lean()
+        .sort({ created_at: -1 })
+        .limit(1);
+    } else {
+      thisWeek = await WeekRepo.getModel()
+        .findOne({ week_number })
+        .session(session)
+        .lean();
+    }
+
+    const league = await this.byID(id, {
+      populations: {
+        model: 'Squad',
+        path: 'squads',
+        select: 'squad_name player artistes total_points',
+        populate: {
+          model: 'Player',
+          path: 'player',
+          select: 'player_name'
+        }
+      }
+    });
+
+    if (!league) throw new LeagueNotExistsError();
+
+    const newSquads = [];
+    const squads = league.squads as any[];
+
+    for (let i = 0; i < squads.length; i++) {
+      const squad = squads[i];
+
+      const points = await PointRepo.get({
+        query: {
+          artiste: { $in: squad.artistes },
+          week_number: thisWeek.week_number
+        },
+        session
+      });
 
       newSquads.push({
         _id: squad.id,

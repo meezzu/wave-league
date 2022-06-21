@@ -9,7 +9,7 @@ export const Day = 24 * Hour;
 export const Week = 7 * Day;
 
 // cron definitions
-export const CRON_DAILY_MIDNIGHT_UTC = '0 0 * * *';
+export const CRON_DAILY_MIDNIGHT_UTC = '* * * * *';
 export const CRON_DAILY_1_AM_UTC = '0 1 * * *';
 
 export const CRON_WEEKLY_MIDNIGHT_UTC = '0 0 * * 0';

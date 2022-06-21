@@ -24,7 +24,8 @@ import {
   points,
   charts,
   leagues,
-  feedbacks
+  feedbacks,
+  mocks
 } from '../server/controllers';
 import gateman from '../server/gateman';
 
@@ -101,6 +102,12 @@ v1Router
 
 v1Router.get('/charts', validator(paginate, 'query'), charts.getMany);
 
+v1Router.get(
+  '/mocks/run-weekly-job',
+  validator(paginate, 'query'),
+  mocks.runWeeklyJob
+);
+
 v1Router
   .get('/leagues', validator(paginate, 'query'), leagues.getMany)
   .post('/leagues', validator(createLeague), leagues.create)
@@ -110,7 +117,7 @@ v1Router
   .post('/leagues/:id/leave', leagues.removeSquad);
 
 v1Router
-    .get('/feedback', feedbacks.getAllFeedbacks)
-    .get('/feedback/:id', feedbacks.getFeedback)
-    .post('/feedback', feedbacks.createFeedback)
+  .get('/feedback', feedbacks.getAllFeedbacks)
+  .get('/feedback/:id', feedbacks.getFeedback)
+  .post('/feedback', feedbacks.createFeedback);
 export default v1Router;
