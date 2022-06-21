@@ -7,7 +7,7 @@ import {
 } from '../../common/errors';
 import { PointRepo } from '../../data/point';
 import { SquadRepo } from '../../data/squad';
-import { WeekRepo } from '../../data/week';
+import { IWeek, WeekRepo } from '../../data/week';
 import { BaseRepository } from '../base';
 import { ILeague } from './league.model';
 import LeagueSchema from './league.schema';
@@ -108,12 +108,22 @@ class LeagueRepository extends BaseRepository<ILeague> {
     return this.getOne(id);
   }
 
-  async getRanking(id: string = 'general', week: number = 1) {
+  async getRanking(id: string = 'general', week_number: number = 0) {
+    let thisWeek: IWeek;
+    if (isNaN(week_number)) {
+      [thisWeek] = await WeekRepo.getModel()
+        .find()
+        .sort({ created_at: -1 })
+        .limit(1);
+    } else {
+      thisWeek = await WeekRepo.getModel().findOne({ week_number });
+    }
+
     const league = await this.byID(id, {
       populations: {
         model: 'Squad',
         path: 'squads',
-        select: 'squad_name player artistes',
+        select: 'squad_name player artistes total_points',
         populate: {
           model: 'Player',
           path: 'player',
@@ -127,31 +137,29 @@ class LeagueRepository extends BaseRepository<ILeague> {
     const newSquads = [];
     const squads = league.squads as any[];
 
-    const totalPoint = await SquadRepo.get({ query: squads[0].total_points })
+    for (let i = 0; i < squads.length; i++) {
+      const squad = squads[i];
 
-   
-    for (let index = 0; index < squads.length; index++) {
-      const squad = squads[index];
+      const points = await PointRepo.getPoints(
+        squad.artistes,
+        thisWeek.week_number
+      );
 
-      let points
-      if (week) {
-        points = await PointRepo.getPoints(squad.artistes, week)
-      } else {
-        points = totalPoint[index].total_points
-      }
-     
-      if (!points) continue;
-      
       newSquads.push({
         _id: squad.id,
-        week,
+        week: thisWeek.week_number,
         points,
+        total_points: squad.total_points,
         squad_name: squad.squad_name,
         player_name: squad.player.player_name
       });
     }
 
-    return newSquads.sort((a, b) => b.points - a.points);
+    if (isNaN(week_number)) {
+      return newSquads.sort((a, b) => b.total_points - a.total_points);
+    } else {
+      return newSquads.sort((a, b) => b.points - a.points);
+    }
   }
 }
 
