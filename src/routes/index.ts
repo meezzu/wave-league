@@ -25,6 +25,7 @@ import {
   charts,
   leagues,
   feedbacks,
+  scores,
   mocks
 } from '../server/controllers';
 import gateman from '../server/gateman';
@@ -120,4 +121,10 @@ v1Router
   .get('/feedback', feedbacks.getAllFeedbacks)
   .get('/feedback/:id', feedbacks.getFeedback)
   .post('/feedback', feedbacks.createFeedback);
+
+  v1Router
+  .get('/scores', scores.getAllScores)
+  .get('/scores/:id', scores.getScores)
+  .get('/scores/:id/week/:wid', scores.getScoresWeek);
+
 export default v1Router;

@@ -7,4 +7,5 @@ export * from './points.controller';
 export * from './charts.controller';
 export * from './league.controller';
 export * from './feedback.controller';
+export * from './scores.controller';
 export * from './mock.controller';
