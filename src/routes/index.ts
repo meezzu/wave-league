@@ -25,7 +25,8 @@ import {
   charts,
   leagues,
   feedbacks,
-  mocks
+  mocks,
+  scores
 } from '../server/controllers';
 import gateman from '../server/gateman';
 
@@ -53,16 +54,11 @@ v1Router
 
 v1Router
   .get('/squads', gateman.guard(), validator(paginate, 'query'), squads.getMany)
-  .post('/squads', gateman.guard(), validator(createSquad), squads.create)
+  .get('/squads/:id/weeks/:wid', squads.weekScores)
+  .get('/squads/:id/transfers', gateman.guard(), squads.transfers)
   .get('/squads/:id', gateman.guard(), squads.getOne)
   .put('/squads/:id', gateman.guard(), validator(updateSquad), squads.update)
-  .get('/squads/:id/transfers', gateman.guard(), squads.transfers)
-  .post('/squad/:id/substitute', gateman.guard(), squads.transfers)
-  .get(
-    '/squads/:id/weeks/:wid/transfers',
-    gateman.guard(),
-    squads.weekTransfers
-  )
+  .post('/squads', gateman.guard(), validator(createSquad), squads.create)
   .post(
     '/squads/:id/add-artistes',
     gateman.guard(),
@@ -117,7 +113,10 @@ v1Router
   .post('/leagues/:id/leave', leagues.removeSquad);
 
 v1Router
-  .get('/feedback', feedbacks.getAllFeedbacks)
-  .get('/feedback/:id', feedbacks.getFeedback)
-  .post('/feedback', feedbacks.createFeedback);
+  .get('/feedback', validator(paginate, 'query'), feedbacks.getMany)
+  .get('/feedback/:id', feedbacks.getOne)
+  .post('/feedback', feedbacks.create);
+
+v1Router.get('/scores', validator(paginate, 'query'), scores.getMany);
+
 export default v1Router;

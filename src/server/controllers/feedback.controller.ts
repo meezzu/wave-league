@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { FeedbackRepo } from '../../data/feedback';
 
 export class FeedbackController extends BaseController {
-  getAllFeedbacks = async (req: Request, res: Response) => {
+  getMany = async (req: Request, res: Response) => {
     try {
       const feedbacks = await FeedbackRepo.getPaged(req.query);
 
@@ -13,7 +13,7 @@ export class FeedbackController extends BaseController {
     }
   };
 
-  getFeedback = async (req: Request, res: Response) => {
+  getOne = async (req: Request, res: Response) => {
     try {
       const feedback = await FeedbackRepo.byID(req.params.id);
 
@@ -23,7 +23,7 @@ export class FeedbackController extends BaseController {
     }
   };
 
-  createFeedback = async (req: Request, res: Response) => {
+  create = async (req: Request, res: Response) => {
     try {
       const feedback = await FeedbackRepo.create(req.body);
 

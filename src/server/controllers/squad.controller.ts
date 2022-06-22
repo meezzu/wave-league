@@ -8,6 +8,7 @@ import {
 } from '../../common/errors';
 import { LeagueRepo } from '../../data/league';
 import logger from '../../common/services/logger';
+import { ScoreRepo } from '../../data/score';
 
 export class SquadController extends BaseController {
   getMany = async (req: Request, res: Response) => {
@@ -45,7 +46,7 @@ export class SquadController extends BaseController {
     } catch (error) {
       if (error.code === 11000) {
         logger.error(error);
-        return this.handleError(req, res, new DuplicateModelError("squad"));
+        return this.handleError(req, res, new DuplicateModelError('squad'));
       }
 
       this.handleError(req, res, error);
@@ -128,6 +129,19 @@ export class SquadController extends BaseController {
       });
 
       this.handleSuccess(req, res, transfers);
+    } catch (error) {
+      this.handleError(req, res, error);
+    }
+  };
+
+  weekScores = async (req: Request, res: Response) => {
+    try {
+      const week_number = req.params.wid;
+      const squad = req.params.id;
+      const query = { squad, week_number };
+
+      const scoreweek = await ScoreRepo.byQuery(query);
+      this.handleSuccess(req, res, scoreweek);
     } catch (error) {
       this.handleError(req, res, error);
     }

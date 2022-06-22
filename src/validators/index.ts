@@ -57,6 +57,7 @@ export const paginate = joi.object({
   name: optionalString.allow('', null),
   label: optionalString.allow('', null),
   sort: optionalString.allow('', null),
+  squad: optionalString.allow('', null),
   max_price: optionalNumber,
   min_price: optionalNumber,
   week: optionalNumber,
