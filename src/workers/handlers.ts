@@ -29,107 +29,7 @@ export async function createWeek(message: ConsumeMessage) {
   };
 
   try {
-    const session = await startSession();
-    await session.withTransaction(async () => {
-      // 1. Create a new week
-      const [week] = await WeekRepo.createMany(
-        [
-          {
-            week_number,
-            start_date: new Date(),
-            end_date: new Date(Date.now() + Day)
-          }
-        ],
-        session
-      );
-      logger.message(`week ${week_number} created`);
-
-      // 2. For every existing artiste, assign new points for this week
-      const artistesCursor = ArtisteRepo.getModel().find().lean().cursor();
-      const points = [];
-      await artistesCursor.eachAsync(artiste =>
-        points.push({
-          points: faker.random.number({ min: 0, max: 100 }),
-          week_number: week_number,
-          artiste: artiste._id,
-          week: week._id
-        })
-      );
-
-      await PointRepo.createMany(points, session);
-      logger.message(`week ${week_number} points for artistes created`);
-
-      // 3. For every existing squad with a complete roster, calculate the points of the existing roster
-      let squadCursor = SquadRepo.getModel().find().lean().cursor();
-      const scores: IScore[] = [];
-      await squadCursor.eachAsync(async squad => {
-        const pts = await PointRepo.get({
-          query: {
-            artiste: { $in: squad.artistes },
-            week_number
-          },
-          session
-        });
-
-        const squadScore = pts
-          .map(it => it.points)
-          .reduce((acc, cur) => acc + cur, 0);
-
-        const roster: Roster[] = [];
-        for (let i = 0; i < squad.roster.length; i++) {
-          const r = squad.roster[i];
-          roster.push({
-            artiste: r.artiste,
-            location: r.location,
-            points: pts.find(it => it.artiste === r.artiste).points
-          });
-        }
-
-        scores.push({
-          week: week._id,
-          score: squadScore,
-          squad: squad._id,
-          week_number,
-          roster
-        });
-      });
-
-      await ScoreRepo.createMany(scores, session);
-      logger.message(`week ${week_number} scores for squads created`);
-
-      // 4. For every existing squad compute weekly stats and save it to the squad
-      squadCursor = SquadRepo.getModel().find().lean().cursor();
-      await squadCursor.eachAsync(async squad => {
-        const [transfers, scores, ranking] = await Promise.all([
-          TransferRepo.get({ query: { squad: squad._id }, session }),
-          ScoreRepo.get({ query: { squad: squad._id }, session }),
-          LeagueRepo.getWeeklyRanking('general', week_number, session),
-          PlayerRepo.getModel().find().limit(1)
-        ]);
-
-        const totalPoints = scores
-          .map(it => it.score)
-          .reduce((acc, cur) => acc + cur, 0);
-
-        const squadRanking = ranking.findIndex(it => it._id === squad._id);
-
-        const results = {
-          transfer_count: transfers.length,
-          squad_ranking: squadRanking + 1,
-          total_points: totalPoints
-        };
-
-        await SquadRepo.getModel()
-          .updateOne({ _id: squad._id }, { $set: results }, { session })
-          .exec();
-
-        logger.message(`week ${week_number} stats aggregated for ${squad._id}`);
-      });
-
-      await session.commitTransaction();
-    });
-    session.endSession();
-
+    await runWeeklyJob(week_number);
     subscriber.acknowledgeMessage(message);
     logger.message('done');
   } catch (err) {
@@ -141,113 +41,123 @@ export async function createWeek(message: ConsumeMessage) {
 }
 
 export async function runWeeklyJob(week_number: number) {
-  try {
-    const session = await startSession();
-    await session.withTransaction(async () => {
-      // 1. Create a new week
-      const [week] = await WeekRepo.createMany(
-        [
-          {
-            week_number,
-            start_date: new Date(),
-            end_date: new Date(Date.now() + Day)
-          }
-        ],
-        session
-      );
-      logger.message(`week ${week_number} created`);
-
-      // 2. For every existing artiste, assign new points for this week
-      const artistesCursor = ArtisteRepo.getModel().find().lean().cursor();
-      const points = [];
-      await artistesCursor.eachAsync(artiste =>
-        points.push({
-          points: faker.random.number({ min: 0, max: 100 }),
-          week_number: week_number,
-          artiste: artiste._id,
-          week: week._id
-        })
-      );
-
-      await PointRepo.createMany(points, session);
-      logger.message(`week ${week_number} points for artistes created`);
-
-      // 3. For every existing squad with a complete roster, calculate the points of the existing roster
-      let squadCursor = SquadRepo.getModel().find().lean().cursor();
-      const scores: IScore[] = [];
-      await squadCursor.eachAsync(async squad => {
-        const pts = await PointRepo.get({
-          query: {
-            artiste: { $in: squad.artistes },
-            week_number
-          },
-          session
-        });
-
-        const squadScore = pts
-          .map(it => it.points)
-          .reduce((acc, cur) => acc + cur, 0);
-
-        const roster: Roster[] = [];
-        for (let i = 0; i < squad.roster.length; i++) {
-          const r = squad.roster[i];
-          roster.push({
-            artiste: r.artiste,
-            location: r.location,
-            points: pts.find(it => it.artiste === r.artiste).points
-          });
-        }
-
-        scores.push({
-          week: week._id,
-          score: squadScore,
-          squad: squad._id,
+  const session = await startSession();
+  await session.withTransaction(async () => {
+    // 1. Create a new week
+    const [week] = await WeekRepo.createMany(
+      [
+        {
           week_number,
-          roster
+          start_date: new Date(),
+          end_date: new Date(Date.now() + Day)
+        }
+      ],
+      session
+    );
+    logger.message(`week ${week_number} created`);
+
+    // 2. For every existing artiste, assign new points for this week
+    const artistesCursor = ArtisteRepo.getModel().find().lean().cursor();
+    const points = [];
+    await artistesCursor.eachAsync(artiste =>
+      points.push({
+        points: faker.random.number({ min: 0, max: 100 }),
+        week_number: week_number,
+        artiste: artiste._id,
+        week: week._id
+      })
+    );
+
+    await PointRepo.createMany(points, session);
+    logger.message(`week ${week_number} points for artistes created`);
+
+    // 3. For every existing squad with a complete roster, calculate the points of the existing roster
+    let squadCursor = SquadRepo.getModel().find().lean().cursor();
+    const scores: IScore[] = [];
+
+    await squadCursor.eachAsync(async squad => {
+      const artistesOnStage = squad.roster
+        .filter(it => it.location === 'stage')
+        .map(it => it.artiste);
+
+      const allPts = await PointRepo.get({
+        query: {
+          artiste: {
+            $in: squad.artistes
+          },
+          week_number
+        },
+        session
+      });
+
+      const stagePts = await PointRepo.get({
+        query: {
+          artiste: {
+            $in: artistesOnStage
+          },
+          week_number
+        },
+        session
+      });
+
+      const squadScore = stagePts
+        .map(it => it.points)
+        .reduce((acc, cur) => acc + cur, 0);
+
+      const roster: Roster[] = [];
+      for (let i = 0; i < squad.roster.length; i++) {
+        const r = squad.roster[i];
+        const artistePoint = allPts.find(pt => pt.artiste === r.artiste);
+
+        roster.push({
+          artiste: r.artiste,
+          location: r.location,
+          points: artistePoint.points
         });
+      }
+
+      scores.push({
+        week: week._id,
+        score: squadScore,
+        squad: squad._id,
+        week_number,
+        roster
       });
-
-      await ScoreRepo.createMany(scores, session);
-      logger.message(`week ${week_number} scores for squads created`);
-
-      // 4. For every existing squad compute weekly stats and save it to the squad
-      squadCursor = SquadRepo.getModel().find().lean().cursor();
-      await squadCursor.eachAsync(async squad => {
-        const [transfers, scores, ranking] = await Promise.all([
-          TransferRepo.get({ query: { squad: squad._id }, session }),
-          ScoreRepo.get({ query: { squad: squad._id }, session }),
-          LeagueRepo.getWeeklyRanking('general', week_number, session),
-          PlayerRepo.getModel().find().limit(1)
-        ]);
-
-        const totalPoints = scores
-          .map(it => it.score)
-          .reduce((acc, cur) => acc + cur, 0);
-
-        const squadRanking = ranking.findIndex(it => it._id === squad._id);
-
-        const results = {
-          transfer_count: transfers.length,
-          squad_ranking: squadRanking + 1,
-          total_points: totalPoints
-        };
-
-        await SquadRepo.getModel()
-          .updateOne({ _id: squad._id }, { $set: results }, { session })
-          .exec();
-
-        logger.message(`week ${week_number} stats aggregated for ${squad._id}`);
-      });
-
-      await session.commitTransaction();
     });
-    session.endSession();
 
-    logger.message('done');
-  } catch (err) {
-    logger.error(err, {
-      info: `an error occured while creating week ${week_number}`,
-      data: { week_number }
+    await ScoreRepo.createMany(scores, session);
+    logger.message(`week ${week_number} scores for squads created`);
+
+    // 4. For every existing squad compute weekly stats and save it to the squad
+    squadCursor = SquadRepo.getModel().find().lean().cursor();
+    await squadCursor.eachAsync(async squad => {
+      const [transfers, scores, ranking] = await Promise.all([
+        TransferRepo.get({ query: { squad: squad._id }, session }),
+        ScoreRepo.get({ query: { squad: squad._id }, session }),
+        LeagueRepo.getWeeklyRanking('general', week_number, session),
+        PlayerRepo.getModel().find().limit(1)
+      ]);
+
+      const totalPoints = scores
+        .map(it => it.score)
+        .reduce((acc, cur) => acc + cur, 0);
+
+      const squadRanking = ranking.findIndex(it => it._id === squad._id);
+
+      const results = {
+        transfer_count: transfers.length,
+        squad_ranking: squadRanking + 1,
+        total_points: totalPoints
+      };
+
+      await SquadRepo.getModel()
+        .updateOne({ _id: squad._id }, { $set: results }, { session })
+        .exec();
+
+      logger.message(`week ${week_number} stats aggregated for ${squad._id}`);
     });
-  }
+
+    await session.commitTransaction();
+  });
+  session.endSession();
 }
