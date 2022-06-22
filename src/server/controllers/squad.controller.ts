@@ -140,7 +140,20 @@ export class SquadController extends BaseController {
       const squad = req.params.id;
       const query = { squad, week_number };
 
-      const scoreweek = await ScoreRepo.byQuery(query);
+      const scoreweek = await ScoreRepo.byQuery(query, {
+        populations: [
+          {
+            model: 'Squad',
+            path: 'squad',
+            select: 'squad_name total_points'
+          },
+          {
+            model: 'Artiste',
+            path: 'roster.artiste',
+            select: 'artiste_name avatar price'
+          }
+        ]
+      });
       this.handleSuccess(req, res, scoreweek);
     } catch (error) {
       this.handleError(req, res, error);
